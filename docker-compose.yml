@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  react:
+    image: front
+    container_name: react_front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "8081:80"

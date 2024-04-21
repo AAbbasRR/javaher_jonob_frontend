@@ -1,0 +1,18 @@
+<svg width="75" height="76" viewBox="0 0 75 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="Group">
+        <path id="Path"
+            d="M62.177 28.746V16.4075C62.177 13.0003 59.415 10.2383 56.0078 10.2383H15.9078C12.5006 10.2383 9.73853 13.0003 9.73853 16.4075V59.5922C9.73853 62.9993 12.5006 65.7614 15.9078 65.7614H31.3309"
+            stroke="#A6AAB3" stroke-width="2.5" />
+        <path id="Path_2" d="M22.0769 22.5765H49.8385" stroke="#A6AAB3" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path id="Path_3" d="M22.0769 34.9154H37.5" stroke="#A6AAB3" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path id="Path_4" d="M22.0769 47.2537H31.3308" stroke="#A6AAB3" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path id="Path_5" d="M65.2615 65.7613L60.2058 60.7056" stroke="#A6AAB3" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        <path id="Path_6"
+            d="M52.0718 41.0845C58.416 41.0845 63.559 46.2274 63.559 52.5716C63.559 58.9158 58.416 64.0587 52.0718 64.0587C45.7277 64.0587 40.5847 58.9158 40.5847 52.5716C40.5852 46.2276 45.7279 41.0849 52.0718 41.0845"
+            stroke="#A6AAB3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+</svg>

@@ -1,0 +1,43 @@
+.select {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	color: var(--bl-on-surface);
+	$inp: &;
+
+	&__label {
+		color: var(--bl-on-surface-variant);
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.25rem; /* 142.857% */
+	}
+
+	&__help {
+		display: flex;
+		justify-content: space-between;
+		color: var(--bl-on-surface-variant);
+		padding: 0 1rem;
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1rem; /* 133.333% */
+	}
+
+	&__placeholder {
+		color: var(--bl-outline);
+	}
+
+	&:global(.error) {
+		& #{$inp}__required {
+			color: var(--bl-error);
+		}
+
+		& #{$inp}__help {
+			color: var(--bl-error);
+		}
+	}
+
+	&__arrow {
+		margin-left: 0.5rem;
+	}
+}

@@ -1,0 +1,12 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: auto;
+	color: var(--bl-outline);
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.25rem; /* 142.857% */
+	font-family: IRANSansXFaNum, sans-serif;
+}

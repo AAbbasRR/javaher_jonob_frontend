@@ -1,0 +1,46 @@
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+
+	button {
+		width: auto;
+
+		&:last-child {
+			min-width: 11.5625rem;
+		}
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	margin-bottom: 1.25rem;
+	gap: 2rem;
+
+	&__bottom {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	&__input {
+		width: 47%;
+
+		&Full {
+			width: 99%;
+			position: relative;
+		}
+	}
+}
+
+.fileUploadInput {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	cursor: pointer;
+}

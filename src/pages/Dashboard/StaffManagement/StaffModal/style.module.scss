@@ -1,0 +1,56 @@
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+
+	button {
+		width: auto;
+
+		&:last-child {
+			min-width: 11.5625rem;
+		}
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	margin-bottom: 1.25rem;
+	gap: 2rem;
+
+	&__bottom {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	&__input {
+		width: 47%;
+
+		&Full {
+			width: 99%;
+		}
+	}
+}
+
+.row {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 47%;
+}
+
+.formLabel {
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 1.25rem;
+}
+
+@media screen and (max-width: 597px) {
+	.form {
+		&__input {
+			width: 99% !important;
+		}
+	}
+}

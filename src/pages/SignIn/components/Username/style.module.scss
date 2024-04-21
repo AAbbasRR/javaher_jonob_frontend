@@ -1,0 +1,21 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.input,
+.button {
+	margin-bottom: 2rem;
+}
+
+.forget {
+	color: var(--bl-secondary);
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 1.25rem; /* 142.857% */
+	text-decoration: none;
+
+	&__icon {
+		width: 1.25rem;
+	}
+}

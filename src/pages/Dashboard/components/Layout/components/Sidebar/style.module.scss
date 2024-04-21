@@ -1,0 +1,138 @@
+.wrapper {
+	display: none;
+	flex: 0 0 16.875rem;
+	flex-direction: column;
+	padding: 0.75rem 0 1.25rem;
+	background: var(--bl-surface);
+	height: 100vh;
+	max-height: 100vh;
+
+	&:global(.active) {
+		display: flex;
+		position: fixed;
+		inset: 0;
+		z-index: 2;
+	}
+}
+
+.close {
+	width: 1.5rem;
+	height: 1.5rem;
+	cursor: pointer;
+	margin: 0 auto 1.34rem 1.25rem;
+}
+
+.header {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 1.5rem;
+	padding: 0.75rem 1.75rem 0;
+	color: var(--bl-on-surface-variant);
+	font-size: 0.625rem;
+	line-height: 0.875rem; /* 140% */
+}
+
+.logo {
+	width: 100%;
+	margin-bottom: 0.5rem;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+}
+
+.nav {
+	&__link {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		color: var(--bl-on-surface-variant);
+		border-bottom: 4px solid transparent;
+		background: transparent;
+		padding: 0.8125rem 0.75rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.5rem; /* 142.857% */
+		text-decoration: none;
+		transition: all 0.3s;
+
+		&:hover {
+			background: var(--bl-surface-container-low);
+		}
+
+		&:global(.active) {
+			color: var(--bl-on-surface);
+			border-color: var(--bl-secondary);
+			background: var(--bl-surface-container-low);
+		}
+
+		&Icon {
+			width: 1.5rem;
+			height: 1.5rem;
+			margin-right: 0.75rem;
+		}
+
+		&Title {
+			margin: 0 10px;
+			font-size: 0.9rem;
+		}
+	}
+
+	&__separator {
+		height: 1px;
+		margin: 1.5rem 1rem;
+		background: var(--outline-variant-outline, #e1e3e5);
+
+		&_bottom {
+			height: 4.19rem;
+			background-color: transparent;
+		}
+	}
+
+	&__heading {
+		color: var(--bl-outline);
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1rem; /* 133.333% */
+		margin-bottom: 0.5rem;
+		padding-right: 1.75rem;
+	}
+}
+
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+
+	button {
+		width: auto;
+
+		&:last-child {
+			min-width: 11.5625rem;
+		}
+	}
+}
+
+.exit {
+	padding: 1rem 0;
+}
+
+@media (min-width: 900px) {
+	.wrapper {
+		display: flex;
+
+		&:global(.active) {
+			display: flex;
+			position: unset;
+			inset: unset;
+			width: 16.8125rem;
+			z-index: unset;
+		}
+	}
+
+	.close {
+		display: none;
+	}
+}

@@ -5,6 +5,7 @@ import IconStoreManagement from "src/assets/icons/icon-store.svg";
 import IconProductManagement from "src/assets/icons/icon-product-management.svg";
 import IconCustomerManagement from "src/assets/icons/icon-customer-management.svg";
 import IconRemove from "src/assets/icons/icon-exit-24.svg";
+import logo from "src/assets/images/logo.png";
 import IconExit from "src/assets/icons/icon-exit.svg";
 import IconHome from "src/assets/icons/icon-home.svg";
 import { Button } from "src/components/Button";
@@ -23,13 +24,19 @@ const menu = [
 		title: "مدیریت انبار",
 		icon: IconStoreManagement,
 		path: "store-management",
-		permissions: ["superuser"],
+		permissions: ["staff", "superuser"],
 	},
 	{
 		title: "مدیریت محصولات",
 		icon: IconProductManagement,
 		path: "product-management",
-		permissions: ["superuser"],
+		permissions: ["staff", "superuser"],
+	},
+	{
+		title: "فاکتور",
+		icon: IconProductManagement,
+		path: "factor-management",
+		permissions: ["superuser", "staff", "secretary", "worker"],
 	},
 	{
 		title: "مدیریت کارمندان",
@@ -65,7 +72,9 @@ export const Sidebar = ({ sidebar, setSidebar }) => {
 					onClick={() => setSidebar(false)}
 				/>
 				<div className={style.header}>
-					<div className={style.logo}>{/* <img src={logo} alt='logo' /> */}</div>
+					<div className={style.logo}>
+						<img src={logo} alt="logo" />
+					</div>
 				</div>
 
 				<div className={style.main}>

@@ -4,6 +4,7 @@ import useAuthStore from "src/store";
 import NotFound from "./404";
 import CustomerManagement from "./Dashboard/CustomerManagement";
 import Dashboard from "./Dashboard/Dashboard";
+import FactorManagement from "./Dashboard/FactorManagement";
 import ProductManagement from "./Dashboard/ProductManagement";
 import StaffManagement from "./Dashboard/StaffManagement";
 import StoreManagement from "./Dashboard/StoreManagement";
@@ -24,6 +25,7 @@ function Pages() {
 					<Route path="customer-management" element={<CustomerManagement />} />
 					<Route path="store-management" element={<StoreManagement />} />
 					<Route path="product-management" element={<ProductManagement />} />
+					<Route path="factor-management" element={<FactorManagement />} />
 					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Route>

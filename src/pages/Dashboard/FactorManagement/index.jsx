@@ -1,23 +1,26 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, Tooltip, Button, Stack } from "@mui/material";
 import _debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import IconDanger from "src/assets/icons/icon-chips-danger.svg";
-import IconSuccess from "src/assets/icons/icon-chips-success.svg";
 import IconDelete from "src/assets/icons/icon-delete.svg";
 import IconEdit from "src/assets/icons/icon-edit.svg";
 import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
+import iconAccept from "src/assets/icons/icon-chips-success.svg";
+import iconInfo from "src/assets/icons/icon-info.svg";
+import iconReject from "src/assets/icons/icon-chips-danger.svg";
+import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
+import iconDetail from "src/assets/icons/icon-search-document.svg";
 import { Table } from "src/components/Table";
 import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
-import StaffModal from "./StaffModal";
+import FactorModal from "./FactorModal";
 import style from "./style.module.scss";
 
-const StaffManagement = () => {
+const FactorManagement = () => {
 	const { userInfo } = useAuthStore();
 	const navigate = useNavigate();
 
@@ -49,7 +52,7 @@ const StaffManagement = () => {
 		const { pageSize, page } = paginationModel;
 
 		axios
-			.get("/user/manage/staff/list_create/", {
+			.get("/factor/manage/list_create/", {
 				params: { search: searchValue, page: page + 1, page_size: pageSize },
 			})
 			.then((res) => {
@@ -63,7 +66,7 @@ const StaffManagement = () => {
 	};
 	const deleteAdmin = (id) => {
 		axios
-			.delete("/user/manage/staff/update_delete/", {
+			.delete("/factor/manage/update_delete/", {
 				params: { pk: id },
 			})
 			.then((res) => {
@@ -77,6 +80,16 @@ const StaffManagement = () => {
 	const editAdmin = (item) => {
 		setAdminModalOpen(true);
 		setEditAdminData(item);
+	};
+	const acceptFactor = (id) => {
+		axios
+			.put(`/factor/manage/accept_factor/?pk=${id}`)
+			.then((res) => {
+				getData();
+			})
+			.catch((err) => {
+				handleError({ err });
+			});
 	};
 
 	useEffect(() => {
@@ -93,59 +106,76 @@ const StaffManagement = () => {
 
 	const columns = [
 		{
-			headerName: "نام",
-			field: "first_name",
+			headerName: "کد رهگیری",
+			field: "tracking_code",
 			flex: 1,
 			sortable: false,
 		},
 		{
-			headerName: "نام خانوادگی",
-			field: "last_name",
+			headerName: "وضعیت پرداخت",
+			field: "paytment",
+			flex: 1,
+			sortable: false,
+			renderCell: ({ row }) =>
+				`${row?.payment_type_display}(${row?.patyment_status ? "پرداخت شده" : "پرداخت نشده"})`,
+		},
+		{
+			headerName: "انبار",
+			field: "store_data",
 			flex: 1,
 			sortable: false,
 		},
 		{
-			headerName: "نام کاربری",
-			field: "username",
+			headerName: "تایید شده",
+			field: "is_accepted",
 			flex: 1,
 			sortable: false,
+			renderCell: ({ row }) => (
+				<div className={style.stack}>
+					<img
+						className={style.Icon}
+						src={row?.is_accepted ? iconAccept : iconReject}
+						alt="is_accepted"
+					/>
+					{!row?.is_accepted && row?.can_accept && (
+						<Button
+							onClick={() => acceptFactor(row?.id)}
+							size="small"
+							variant="contained"
+							color="success"
+						>
+							تایید
+						</Button>
+					)}
+				</div>
+			),
 		},
 		{
-			headerName: "نوع",
-			field: "type_display",
+			headerName: "جزییات/چاپ فاکتور",
+			field: "detail",
 			flex: 1,
 			sortable: false,
+			renderCell: ({ row }) => (
+				<div className={style.row}>
+					<Tooltip title="جزییات">
+						<IconButton className={style.IconButton} onClick={() => editAdmin(row)}>
+							<img src={iconDetail} alt="detail-icon" />
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="چاپ">
+						<IconButton className={style.IconButton} onClick={() => deleteAdmin(row?.id)}>
+							<LocalPrintshopIcon alt="print-icon" />
+						</IconButton>
+					</Tooltip>
+				</div>
+			),
 		},
 		{
 			headerName: "تاریخ ایجاد",
-			field: "formatted_date_joined",
+			field: "formatted_create_at",
 			flex: 1,
 			sortable: false,
-			renderCell: ({ row }) => new Date(row?.formatted_date_joined).toLocaleString("fa-IR"),
-		},
-		{
-			headerName: "تاریخ آخرین ورود",
-			field: "formatted_last_login",
-			flex: 1,
-			sortable: false,
-			renderCell: ({ row }) => {
-				if (row?.formatted_last_login === null) {
-					return "وارد نشده";
-				}
-				return new Date(row?.formatted_last_login).toLocaleString("fa-IR");
-			},
-		},
-		{
-			headerName: "فعال بودن حساب",
-			field: "is_active",
-			sortable: false,
-			renderCell: ({ row }) => (
-				<img
-					className={style.roleChips}
-					src={row?.is_active ? IconSuccess : IconDanger}
-					alt="is_active_status"
-				/>
-			),
+			renderCell: ({ row }) => new Date(row?.formatted_create_at).toLocaleString("fa-IR"),
 		},
 		{
 			headerName: "",
@@ -153,16 +183,25 @@ const StaffManagement = () => {
 			sortable: false,
 			renderCell: ({ row }) => (
 				<div className={style.row}>
-					<Tooltip title="ویرایش">
-						<IconButton className={style.IconButton} onClick={() => editAdmin(row)}>
-							<img src={IconEdit} alt="delete-icon" />
+					<Tooltip title={`توضیحات: ${row?.description || "خالی"}`}>
+						<IconButton className={style.IconButton}>
+							<img src={iconInfo} alt="info-icon" />
 						</IconButton>
 					</Tooltip>
-					<Tooltip title="حذف">
-						<IconButton className={style.IconButton} onClick={() => deleteAdmin(row?.id)}>
-							<img src={IconDelete} alt="delete-icon" />
-						</IconButton>
-					</Tooltip>
+					{["superuser", "staff", "secretary"].includes(userInfo.type) && (
+						<Tooltip title="ویرایش">
+							<IconButton className={style.IconButton} onClick={() => editAdmin(row)}>
+								<img src={IconEdit} alt="delete-icon" />
+							</IconButton>
+						</Tooltip>
+					)}
+					{["superuser", "staff"].includes(userInfo.type) && (
+						<Tooltip title="حذف">
+							<IconButton className={style.IconButton} onClick={() => deleteAdmin(row?.id)}>
+								<img src={IconDelete} alt="delete-icon" />
+							</IconButton>
+						</Tooltip>
+					)}
 				</div>
 			),
 		},
@@ -175,8 +214,8 @@ const StaffManagement = () => {
 					<div className={`${style.history} ${"active"}`}>
 						<div className={style.header}>
 							<div className={style.header__title}>
-								<div className={style.title}>مدیریت کارمندان</div>
-								<Tooltip title="اضافه کردن کارمند">
+								<div className={style.title}>مدیریت فاکتور</div>
+								<Tooltip title="ثبت فاکتور جدید">
 									<IconButton className={style.IconButton} onClick={() => setAdminModalOpen(true)}>
 										<img src={IconAdd} alt="add-icon" />
 									</IconButton>
@@ -209,7 +248,7 @@ const StaffManagement = () => {
 					</div>
 				</div>
 			</div>
-			<StaffModal
+			<FactorModal
 				open={adminModalOpen}
 				setOpen={setAdminModalOpen}
 				setDefaultValue={setEditAdminData}
@@ -221,4 +260,4 @@ const StaffManagement = () => {
 	);
 };
 
-export default StaffManagement;
+export default FactorManagement;

@@ -14,7 +14,7 @@ import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
-import { bool, object, string } from "yup";
+import { bool, array, object, string } from "yup";
 import style from "./style.module.scss";
 
 const schema = (isUpdate) =>
@@ -25,6 +25,7 @@ const schema = (isUpdate) =>
 		password: isUpdate ? string() : string().required(translate.errors.required),
 		is_active: bool(false),
 		type: string().required(translate.errors.required),
+		stores: array(),
 	});
 
 const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, defaultValue = null }) => {
@@ -41,10 +42,12 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 		mode: "onChange",
 		resolver: yupResolver(schema(defaultValue !== null)),
 	});
+	const user_type = watch("type");
 
 	const [loading, setLoading] = useState(false);
 	const [editItemID, setEditItemID] = useState(null);
 	const [showPassword, setShowPassword] = useState(false);
+	const [storeData, setStoreData] = useState([]);
 
 	const onSubmit = (data) => {
 		setLoading(true);
@@ -79,7 +82,26 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 		reset();
 		setDefaultValue(null);
 	};
+	const getStoreData = () => {
+		axios
+			.get("/store/manage/list_create/")
+			.then((res) => {
+				const storeDataVar = [];
+				res?.data?.results?.map((item) => {
+					storeDataVar.push({
+						name: item?.name,
+						value: String(item?.id),
+						key: item?.id,
+					});
+				});
+				setStoreData([...storeDataVar]);
+			})
+			.catch((err) => {});
+	};
 
+	useEffect(() => {
+		getStoreData();
+	}, []);
 	useEffect(() => {
 		if (defaultValue !== null) {
 			setEditItemID(defaultValue?.id);
@@ -88,6 +110,7 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 			setValue("is_active", defaultValue?.is_active);
 			setValue("username", defaultValue?.username);
 			setValue("type", defaultValue?.type);
+			setValue("stores", defaultValue?.stores);
 		}
 	}, [defaultValue]);
 
@@ -163,6 +186,18 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 						{ value: "worker", name: "کارگر" },
 					]}
 				/>
+				{["secretary", "worker"].includes(user_type) && <Select
+					className={style.form__input}
+					size="xlarge"
+					label="شعبه های کاری"
+					placeholder="انتخاب شعبه"
+					required
+					multiple
+					name="stores"
+					control={control}
+					error={errors.stores?.message}
+					options={storeData}
+				/>}
 				<div className={style.row}>
 					<FormControlLabel
 						className={style.formLabel}

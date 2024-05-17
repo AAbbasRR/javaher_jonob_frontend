@@ -18,13 +18,19 @@ const menu = [
 		title: "انبار",
 		icon: IconStoreManagement,
 		path: "store-management",
-		permissions: ["superuser"],
+		permissions: ["staff", "superuser"],
 	},
 	{
 		title: "محصولات",
 		icon: IconProductManagement,
 		path: "product-management",
-		permissions: ["superuser"],
+		permissions: ["staff", "superuser"],
+	},
+	{
+		title: "فاکتور",
+		icon: IconProductManagement,
+		path: "factor-management",
+		permissions: ["superuser", "staff", "secretary", "worker"],
 	},
 	{
 		title: "کارمندان",

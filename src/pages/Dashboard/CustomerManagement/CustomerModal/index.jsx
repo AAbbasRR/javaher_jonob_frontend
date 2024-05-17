@@ -8,7 +8,7 @@ import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
-import { object, string } from "yup";
+import { object, string, number } from "yup";
 import style from "./style.module.scss";
 
 const schema = () =>
@@ -16,7 +16,7 @@ const schema = () =>
 		mobile_number: string().required(translate.errors.required).length(11, "حداکثر ۱۱ رقم"),
 		full_name: string().required(translate.errors.required),
 		national_code: string().required(translate.errors.required).length(10, "حداکثر ۱۰ رقم"),
-		customer_code: string().length(10, "حداکثر ۱۰ رقم"),
+		customer_code: number().max(10, "حداکثر ۱۰ رقم"),
 	});
 
 const CustomerModal = ({

@@ -1,0 +1,155 @@
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+
+	button {
+		width: auto;
+
+		&:last-child {
+			min-width: 11.5625rem;
+		}
+	}
+}
+
+.title {
+	display: block;
+	width: 100%;
+	font-weight: bold;
+}
+
+.form {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	margin-bottom: 1.25rem;
+	gap: 2rem;
+
+	&__bottom {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	&__input {
+		width: 31% !important;
+
+		&Big {
+			width: 65% !important;
+		}
+
+		&Full {
+			width: 99%;
+		}
+	}
+}
+
+.payment_status {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	justify-content: center;
+	margin-top: 1.5rem;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.row {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 31%;
+}
+
+.formLabel {
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 1.25rem;
+}
+
+@media screen and (max-width: 597px) {
+	.form {
+		&__input {
+			width: 99% !important;
+		}
+	}
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	width: 100%;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 1.25rem; /* 142.857% */
+	color: var(--bl-on-surface);
+
+	&__headrow {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		gap: 0.5rem;
+		padding: 0.75rem;
+		font-weight: 1000;
+	}
+
+	&__row {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		gap: 0.5rem;
+		padding: 0.75rem;
+		font-weight: 300;
+		position: relative;
+
+		&:nth-child(even) {
+			border-radius: 1rem;
+			background: var(--bl-surface);
+		}
+	}
+
+	&__columnStack {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-evenly;
+		height: 100% !important;
+		position: absolute;
+		top: 50%;
+		right: 1%;
+		transform: translate(-1%, -50%);
+	}
+
+	&__start {
+		display: flex;
+		flex-direction: row;
+		gap: 0.5rem;
+		width: 100%;
+
+		& > span {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 50rem;
+			text-wrap: wrap;
+			text-align: center;
+			color: var(--bl-on-surface-variant);
+		}
+	}
+}
+
+.miniSize {
+	width: 7rem !important;
+}
+
+.removeIcon {
+	width: 2rem;
+	height: 2rem;
+	cursor: pointer;
+}

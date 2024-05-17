@@ -110,7 +110,7 @@ const ProductManagement = () => {
 			sortable: false,
 		},
 		{
-			headerName: "درصصدمالیات",
+			headerName: "درصدمالیات",
 			field: "tax",
 			flex: 1,
 			sortable: false,

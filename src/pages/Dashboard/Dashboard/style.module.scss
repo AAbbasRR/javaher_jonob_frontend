@@ -26,58 +26,88 @@
 	}
 }
 
-.IconButton {
-	padding: 0px !important;
-}
-
-.IconExcell {
-	width: 22px;
-	height: 22px;
-}
-
-.input {
-	width: 15rem !important;
-}
-
-.row {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 0.75rem;
-}
-
-.history {
-	flex: 1;
-	display: none;
-	flex-direction: column;
-	position: fixed;
-	inset: 0;
-	padding: 1rem;
-	background: #fff;
-	z-index: 1;
-
-	&:global(.active) {
-		display: flex;
-	}
-}
-
 .title {
 	color: var(--bl-on-surface);
 	font-size: 1.2rem;
 	font-weight: 600;
 }
 
-.table {
-	max-width: calc(100vw - 2rem);
+.infoBox {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	height: 10rem;
+	box-shadow:
+		0 0 1px rgba(0, 0, 0, 0.125),
+		0 1px 3px rgba(0, 0, 0, 0.2);
+	margin-bottom: 2rem;
+
+	&__title {
+		color: #fefefe;
+		font-weight: bold;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
+
+		&__counter {
+			font-size: 40px;
+			font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode",
+				Geneva, Verdana, sans-serif;
+		}
+
+		&Dark {
+			color: #212121;
+		}
+	}
+
+	&__icon {
+		font-size: 4rem !important;
+		color: rgba(0, 0, 0, 0.15) !important;
+	}
 }
 
-@media (min-width: 900px) {
-	.history {
+.primaryBox {
+	background: #17a2b8;
+}
+
+.successBox {
+	background: #28a745;
+}
+
+.warningBox {
+	background: #ffc107;
+}
+
+.chartBox, .chartBox__Big {
+	display: flex;
+	flex-direction: column;
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	height: 20rem;
+	box-shadow:
+		0 0 5px rgba(0, 0, 0, 0.125),
+		0 4px 6px rgba(0, 0, 0, 0.2);
+	margin-bottom: 2rem;
+	background-color: #fefefe;
+
+	&__Big {
+		height: 30rem;
+	}
+
+	&__header {
 		display: flex;
-		position: unset;
-		inset: unset;
-		padding: 0;
-		z-index: unset;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1rem;
+
+		&__title {
+			color: var(--bl-on-surface);
+			font-size: 1rem;
+			font-weight: 600;
+		}
 	}
 }
 

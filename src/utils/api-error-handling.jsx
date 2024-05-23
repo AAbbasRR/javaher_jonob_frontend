@@ -11,7 +11,7 @@ export const handleError = ({ err, setError = null }) => {
 			for (let key in response) {
 				setError(key, {
 					type: "custom",
-					message: response[key][0],
+					message: response[key],
 				});
 			}
 		}

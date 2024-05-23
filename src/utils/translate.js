@@ -2,7 +2,7 @@ export const translate = {
 	errors: {
 		required: "این فیلد الزامی است.",
 		phone: "شماره همراه معتبر نیست.",
-		otp: "کد تایید را درست وارد کنید.",
+		repassword: 'رمزهای عبور باید مطابقت داشته باشند',
 	},
 	notify: {
 		entranceSuccess: "ورود باموفقیت انجام شد.",

@@ -9,6 +9,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	overflow: scroll;
 }
 
 .nav {
@@ -33,6 +34,7 @@
 		line-height: 0.9375rem; /* 150% */
 		text-decoration: none;
 		border-top: 4px solid transparent;
+		text-align: center;
 
 		&:global(.active) {
 			color: var(--bl-secondary);

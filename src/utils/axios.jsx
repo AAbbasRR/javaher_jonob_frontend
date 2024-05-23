@@ -12,6 +12,7 @@ instance.interceptors.request.use(async (config) => {
 	if (accessToken !== null) {
 		config.headers.Authorization = `Bearer ${accessToken}`;
 	}
+	config.headers["Accept-Language"] = "fa";
 	return config;
 });
 

@@ -1,0 +1,116 @@
+.wrapper {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	padding: 3rem 0rem !important;
+	margin: 0 auto;
+	max-width: 90%;
+}
+
+.main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+
+	&__title {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+}
+
+.history {
+	flex: 1;
+	display: none;
+	flex-direction: column;
+	position: fixed;
+	inset: 0;
+	padding: 1rem;
+	background: #fff;
+	z-index: 1;
+
+	&:global(.active) {
+		display: flex;
+	}
+}
+
+.title {
+	color: var(--bl-on-surface);
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+
+	button {
+		width: auto;
+
+		&:last-child {
+			min-width: 11.5625rem;
+		}
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	margin-bottom: 1.25rem;
+	gap: 2rem;
+
+	&__bottom {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	&__input {
+		width: 31%;
+
+		&Full {
+			width: 99%;
+		}
+	}
+}
+
+@media screen and (max-width: 1285px) {
+	.form {
+		&__input {
+			width: 47% !important;
+		}
+	}
+}
+
+@media screen and (max-width: 597px) {
+	.form {
+		&__input {
+			width: 99% !important;
+		}
+	}
+}
+
+@media (min-width: 900px) {
+	.history {
+		display: flex;
+		position: unset;
+		inset: unset;
+		padding: 0;
+		z-index: unset;
+	}
+}
+
+@media (min-width: 1200px) {
+	.wrapper {
+		padding: 0;
+	}
+}

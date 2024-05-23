@@ -8,6 +8,7 @@ import FactorManagement from "./Dashboard/FactorManagement";
 import ProductManagement from "./Dashboard/ProductManagement";
 import StaffManagement from "./Dashboard/StaffManagement";
 import StoreManagement from "./Dashboard/StoreManagement";
+import ChangePassword from "./Dashboard/ChangePassword";
 import Layout from "./Dashboard/components/Layout";
 import SignIn from "./SignIn";
 
@@ -26,6 +27,7 @@ function Pages() {
 					<Route path="store-management" element={<StoreManagement />} />
 					<Route path="product-management" element={<ProductManagement />} />
 					<Route path="factor-management" element={<FactorManagement />} />
+					<Route path="change-password" element={<ChangePassword />} />
 					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Route>

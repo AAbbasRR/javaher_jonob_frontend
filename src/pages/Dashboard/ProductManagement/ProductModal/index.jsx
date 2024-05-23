@@ -14,9 +14,7 @@ import style from "./style.module.scss";
 const schema = (isUpdate) =>
 	object({
 		name: string().required(translate.errors.required),
-		weight: number()
-			.required(translate.errors.required)
-			.min(1, "وزن نباید کمتر از ۱ کیلوگرم باشد"),
+		weight: number().required(translate.errors.required).min(1, "وزن نباید کمتر از ۱ کیلوگرم باشد"),
 		price: number().required(translate.errors.required).min(0, "مبلغ نباید کمتر از ۰ باشد"),
 		tax: number()
 			.required(translate.errors.required)
@@ -82,12 +80,13 @@ const ProductModal = ({
 	};
 
 	useEffect(() => {
+		console.log(defaultValue);
 		if (defaultValue !== null) {
 			setEditItemID(defaultValue?.id);
-			setValue("name", defaultValue?.first_name);
-			setValue("weight", defaultValue?.last_name);
-			setValue("price", defaultValue?.is_active);
-			setValue("tax", defaultValue?.username);
+			setValue("name", defaultValue?.name);
+			setValue("weight", defaultValue?.weight);
+			setValue("price", defaultValue?.price);
+			setValue("tax", defaultValue?.tax);
 		}
 	}, [defaultValue]);
 

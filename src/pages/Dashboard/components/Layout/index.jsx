@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Sidebar } from "./components/Sidebar";
+import { Header } from "./components/Header";
 import styles from "./style.module.scss";
 
 const Layout = () => {
@@ -9,6 +10,7 @@ const Layout = () => {
 
 	return (
 		<>
+			<Header setSidebar={setSidebar} />
 			<div className={styles.wrapper}>
 				<Sidebar sidebar={sidebar} setSidebar={setSidebar} />
 				<div className={styles.content}>

@@ -47,6 +47,9 @@ const StoreManagement = () => {
 				params: { search: searchValue, page: page + 1, page_size: pageSize },
 			})
 			.then((res) => {
+				res?.data?.results?.map((node, index) => {
+					node.index = index + 1;
+				});
 				setData(res.data.results);
 				setCount(res?.data?.count_all);
 			})
@@ -81,6 +84,11 @@ const StoreManagement = () => {
 	}, [reload, paginationModel]);
 
 	const columns = [
+		{
+			headerName: "ردیف",
+			field: "index",
+			sortable: false,
+		},
 		{
 			headerName: "نام انبار",
 			field: "name",
@@ -124,10 +132,7 @@ const StoreManagement = () => {
 							<div className={style.header__title}>
 								<div className={style.title}>مدیریت انبار</div>
 								<Tooltip title="اضافه کردن انبار">
-									<IconButton
-										className={style.IconButton}
-										onClick={() => setStoreModalOpen(true)}
-									>
+									<IconButton className={style.IconButton} onClick={() => setStoreModalOpen(true)}>
 										<img src={IconAdd} alt="add-icon" />
 									</IconButton>
 								</Tooltip>

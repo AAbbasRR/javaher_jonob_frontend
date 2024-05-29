@@ -51,6 +51,9 @@ const ProductManagement = () => {
 				params: { search: searchValue, page: page + 1, page_size: pageSize },
 			})
 			.then((res) => {
+				res?.data?.results?.map((node, index) => {
+					node.index = index + 1;
+				});
 				setData(res.data.results);
 				setCount(res?.data?.count_all);
 			})
@@ -90,6 +93,11 @@ const ProductManagement = () => {
 	}, [reload, paginationModel]);
 
 	const columns = [
+		{
+			headerName: "ردیف",
+			field: "index",
+			sortable: false,
+		},
 		{
 			headerName: "عنوان",
 			field: "name",

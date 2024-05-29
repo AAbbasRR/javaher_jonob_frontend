@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Autocomplete, Popper, TextField, Tooltip } from "@mui/material";
 import _debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import iconRemove from "src/assets/icons/icon-remove.svg";
 import { Button } from "src/components/Button";
 import { Input } from "src/components/Input";
@@ -14,7 +14,7 @@ import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
-import { number, array, object, string, boolean } from "yup";
+import { boolean, number, object, string } from "yup";
 import style from "./style.module.scss";
 
 const sxProps = {
@@ -49,7 +49,7 @@ const schema = () =>
 		customer: number().required(translate.errors.required),
 		marketer: number(),
 		address: number().required(translate.errors.required),
-		stores: array().required(translate.errors.required),
+		store: number().required(translate.errors.required),
 		description: string(),
 	});
 
@@ -84,6 +84,7 @@ const FactorModal = ({
 			payment_status: true,
 		},
 	});
+	console.log(errors);
 
 	const [loading, setLoading] = useState(false);
 	const [editItemID, setEditItemID] = useState(null);
@@ -365,7 +366,7 @@ const FactorModal = ({
 				<Input
 					className={style.form__input}
 					size="xlarge"
-					label="کد رهگیری"
+					label="شماره فاکتور"
 					error={errors.tracking_code?.message}
 					{...register("tracking_code")}
 				/>

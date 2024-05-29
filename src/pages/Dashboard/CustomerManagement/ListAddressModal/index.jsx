@@ -102,6 +102,18 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 			sortable: false,
 		},
 		{
+			headerName: "شهر",
+			field: "city",
+			flex: 1,
+			sortable: false,
+		},
+		{
+			headerName: "خیابان",
+			field: "street",
+			flex: 1,
+			sortable: false,
+		},
+		{
 			headerName: "آدرس",
 			field: "full_address",
 			flex: 1,

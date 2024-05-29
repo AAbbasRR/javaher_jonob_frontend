@@ -1,18 +1,18 @@
-import { IconButton, Tooltip, Button, Stack } from "@mui/material";
+import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import _debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import iconReject from "src/assets/icons/icon-chips-danger.svg";
+import iconAccept from "src/assets/icons/icon-chips-success.svg";
 import IconDelete from "src/assets/icons/icon-delete.svg";
 import IconEdit from "src/assets/icons/icon-edit.svg";
+import iconInfo from "src/assets/icons/icon-info.svg";
 import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
+import iconDetail from "src/assets/icons/icon-search-document.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
-import iconAccept from "src/assets/icons/icon-chips-success.svg";
-import iconInfo from "src/assets/icons/icon-info.svg";
-import iconReject from "src/assets/icons/icon-chips-danger.svg";
-import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import iconDetail from "src/assets/icons/icon-search-document.svg";
 import { Table } from "src/components/Table";
 import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
@@ -106,7 +106,7 @@ const FactorManagement = () => {
 
 	const columns = [
 		{
-			headerName: "کد رهگیری",
+			headerName: "شماره فاکتور",
 			field: "tracking_code",
 			flex: 1,
 			sortable: false,

@@ -16,6 +16,8 @@ const schema = () =>
 		customer: string().required(translate.errors.required),
 		country: string().required(translate.errors.required),
 		state: string().required(translate.errors.required),
+		city: string().required(translate.errors.required),
+		street: string().required(translate.errors.required),
 		full_address: string().required(translate.errors.required),
 	});
 
@@ -106,6 +108,8 @@ const AddressModal = ({
 			setEditItemID(defaultValue?.id);
 			setValue("customer", defaultValue?.customer);
 			setValue("country", defaultValue?.country);
+			setValue("city", defaultValue?.city);
+			setValue("street", defaultValue?.street);
 			setValue("state", defaultValue?.state);
 			setValue("full_address", defaultValue?.full_address);
 		}
@@ -151,6 +155,20 @@ const AddressModal = ({
 					label="استان"
 					error={errors.state?.message}
 					{...register("state")}
+				/>
+				<Input
+					className={style.form__input}
+					size="xlarge"
+					label="شهر"
+					error={errors.city?.message}
+					{...register("city")}
+				/>
+				<Input
+					className={style.form__input}
+					size="xlarge"
+					label="خیابان"
+					error={errors.street?.message}
+					{...register("street")}
 				/>
 				<Input
 					className={style.form__inputFull}

@@ -61,7 +61,6 @@ export const Username = () => {
 				className={style.input}
 				{...register("username")}
 			/>
-
 			<Input
 				required
 				size="xlarge"
@@ -76,7 +75,6 @@ export const Username = () => {
 				}
 				{...register("password")}
 			/>
-
 			<Button className={style.button} size="xlarge" loading={loading} disabled={loading}>
 				ورود
 			</Button>

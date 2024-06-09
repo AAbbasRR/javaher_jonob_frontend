@@ -8,6 +8,7 @@ import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
+import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
@@ -23,7 +24,7 @@ const ProductManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
@@ -63,6 +64,7 @@ const ProductManagement = () => {
 			.finally(() => setLoading(false));
 	};
 	const deleteAdmin = (id) => {
+		setLoading(true);
 		axios
 			.delete("/product/manage/update_delete/", {
 				params: { pk: id },
@@ -96,31 +98,37 @@ const ProductManagement = () => {
 		{
 			headerName: "ردیف",
 			field: "index",
+			minWidth: 100,
 			sortable: false,
 		},
 		{
 			headerName: "عنوان",
 			field: "name",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "حجم(کیلو)",
 			field: "weight",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
 			renderCell: ({ row }) => `${row?.tax}KG`,
 		},
 		{
-			headerName: "قیمت",
+			headerName: "قیمت(ریال)",
 			field: "price",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
+			renderCell: ({ row }) => row?.price.toLocaleString(),
 		},
 		{
 			headerName: "درصدمالیات",
 			field: "tax",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
 			renderCell: ({ row }) => `${row?.tax}%`,
 		},
@@ -128,6 +136,7 @@ const ProductManagement = () => {
 			headerName: "تاریخ ایجاد",
 			field: "formatted_create_at",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => new Date(row?.formatted_create_at).toLocaleString("fa-IR"),
 		},
@@ -187,6 +196,8 @@ const ProductManagement = () => {
 									onPaginationModelChange={setPaginationModel}
 								/>
 							</div>
+						) : loading ? (
+							<Spin size={50} />
 						) : (
 							<Empty />
 						)}

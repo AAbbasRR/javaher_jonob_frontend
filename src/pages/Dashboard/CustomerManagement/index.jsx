@@ -7,6 +7,7 @@ import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import IconSearchList from "src/assets/icons/icon-search-document.svg";
 import { Empty } from "src/components/Empty";
+import { Spin } from "src/components/Spin";
 import { Input } from "src/components/Input";
 import { Table } from "src/components/Table";
 import { handleError } from "src/utils/api-error-handling";
@@ -20,7 +21,7 @@ const CustomerManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [listAddressModalOpen, setListAddressModalOpen] = useState(false);
 	const [value, setValue] = useState("");
 	const [customerModalOpen, setCustomerModalOpen] = useState(false);
@@ -60,6 +61,7 @@ const CustomerManagement = () => {
 			.finally(() => setLoading(false));
 	};
 	const deleteCustomer = (id) => {
+		setLoading(true);
 		axios
 			.delete("/customer/manage/update_delete/", {
 				params: { pk: id },
@@ -93,30 +95,42 @@ const CustomerManagement = () => {
 			headerName: "کد مشتری",
 			field: "customer_code",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "نام و نام خانوادگی",
 			field: "full_name",
 			flex: 1,
+			minWidth: 150,
+			sortable: false,
+		},
+		{
+			headerName: "بازاریاب",
+			field: "marketer",
+			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "شماره تماس",
 			field: "mobile_number",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "کد ملی",
 			field: "national_code",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "تاریخ ایجاد",
 			field: "formatted_date_joined",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => new Date(row?.formatted_create_at).toLocaleString("fa-IR"),
 		},
@@ -124,6 +138,7 @@ const CustomerManagement = () => {
 			headerName: "آدرس های مشتری",
 			field: "medicines",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => (
 				<Tooltip title="آدرس ها">
@@ -192,6 +207,8 @@ const CustomerManagement = () => {
 									onPaginationModelChange={setPaginationModel}
 								/>
 							</div>
+						) : loading ? (
+							<Spin size={50} />
 						) : (
 							<Empty />
 						)}

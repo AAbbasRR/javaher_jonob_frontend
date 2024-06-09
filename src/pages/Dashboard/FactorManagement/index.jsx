@@ -8,16 +8,21 @@ import iconAccept from "src/assets/icons/icon-chips-success.svg";
 import IconDelete from "src/assets/icons/icon-delete.svg";
 import IconEdit from "src/assets/icons/icon-edit.svg";
 import iconInfo from "src/assets/icons/icon-info.svg";
-import IconSearch from "src/assets/icons/icon-input-search.svg";
+import {
+	default as IconSearch,
+	default as iconPayment,
+} from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import iconDetail from "src/assets/icons/icon-search-document.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
+import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import FactorModal from "./FactorModal";
+import PaymentsModal from "./PaymentsModal";
 import style from "./style.module.scss";
 
 const FactorManagement = () => {
@@ -28,10 +33,12 @@ const FactorManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
+	const [paymentsModalOpen, setPaymentsModalOpen] = useState(false);
+	const [paymentsData, setPaymentsData] = useState(null);
 	const [reload, setReload] = useState(false);
 
 	const debouncedSearch = useMemo(
@@ -65,6 +72,7 @@ const FactorManagement = () => {
 			.finally(() => setLoading(false));
 	};
 	const deleteAdmin = (id) => {
+		setLoading(true);
 		axios
 			.delete("/factor/manage/update_delete/", {
 				params: { pk: id },
@@ -80,6 +88,10 @@ const FactorManagement = () => {
 	const editAdmin = (item) => {
 		setAdminModalOpen(true);
 		setEditAdminData(item);
+	};
+	const paymentsModal = (item) => {
+		setPaymentsModalOpen(true);
+		setPaymentsData(item);
 	};
 	const acceptFactor = (id) => {
 		axios
@@ -109,26 +121,66 @@ const FactorManagement = () => {
 			headerName: "شماره فاکتور",
 			field: "tracking_code",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
-			headerName: "وضعیت پرداخت",
-			field: "paytment",
+			headerName: "تاریخ فاکتور",
+			field: "factor_date",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
-			renderCell: ({ row }) =>
-				`${row?.payment_type_display}(${row?.patyment_status ? "پرداخت شده" : "پرداخت نشده"})`,
+			renderCell: ({ row }) => new Date(row?.factor_date).toLocaleString("fa-IR").split(", ")[0],
+		},
+		{
+			headerName: "مبلغ فاکتور(ریال)",
+			field: "payment_amount",
+			flex: 1,
+			minWidth: 120,
+			sortable: false,
+			renderCell: ({ row }) => row?.payment_amount.toLocaleString(),
+		},
+		{
+			headerName: "مشتری",
+			field: "customer_data",
+			flex: 1,
+			minWidth: 120,
+			sortable: false,
+			renderCell: ({ row }) => row?.customer_data?.full_name,
+		},
+		{
+			headerName: "بازاریاب",
+			field: "marketer_data",
+			flex: 1,
+			minWidth: 120,
+			sortable: false,
+			renderCell: ({ row }) => row?.customer_data?.marketer || "خالی",
+		},
+		{
+			headerName: "وضعیت پرداخت",
+			flex: 1,
+			minWidth: 130,
+			sortable: false,
+			renderCell: ({ row }) => (
+				<span
+					className={row?.payment_status ? style.paymentStatusSuccess : style.paymentStatusError}
+				>
+					{row?.payment_status ? "پرداخت شده" : "پرداخت نشده"}
+				</span>
+			),
 		},
 		{
 			headerName: "انبار",
 			field: "store_data",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "تایید شده",
 			field: "is_accepted",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
 			renderCell: ({ row }) => (
 				<div className={style.stack}>
@@ -151,20 +203,21 @@ const FactorManagement = () => {
 			),
 		},
 		{
-			headerName: "جزییات/چاپ فاکتور",
-			field: "detail",
+			headerName: "پرداخت / چاپ فاکتور",
+			field: "payment",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
 			renderCell: ({ row }) => (
 				<div className={style.row}>
-					<Tooltip title="جزییات">
-						<IconButton className={style.IconButton} onClick={() => editAdmin(row)}>
-							<img src={iconDetail} alt="detail-icon" />
-						</IconButton>
-					</Tooltip>
 					<Tooltip title="چاپ">
 						<IconButton className={style.IconButton} onClick={() => deleteAdmin(row?.id)}>
 							<LocalPrintshopIcon alt="print-icon" />
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="دریافت/پرداخت">
+						<IconButton className={style.IconButton} onClick={() => paymentsModal(row)}>
+							<img src={iconPayment} alt="payment-icon" />
 						</IconButton>
 					</Tooltip>
 				</div>
@@ -174,6 +227,7 @@ const FactorManagement = () => {
 			headerName: "تاریخ ایجاد",
 			field: "formatted_create_at",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => new Date(row?.formatted_create_at).toLocaleString("fa-IR"),
 		},
@@ -242,6 +296,8 @@ const FactorManagement = () => {
 									onPaginationModelChange={setPaginationModel}
 								/>
 							</div>
+						) : loading ? (
+							<Spin size={50} />
 						) : (
 							<Empty />
 						)}
@@ -253,6 +309,13 @@ const FactorManagement = () => {
 				setOpen={setAdminModalOpen}
 				setDefaultValue={setEditAdminData}
 				defaultValue={editAdminData}
+				reload={reload}
+				setReload={setReload}
+			/>
+			<PaymentsModal
+				open={paymentsModalOpen}
+				setOpen={setPaymentsModalOpen}
+				defaultValues={paymentsData}
 				reload={reload}
 				setReload={setReload}
 			/>

@@ -15,6 +15,7 @@ const schema = () =>
 	object({
 		mobile_number: string().required(translate.errors.required).length(11, "حداکثر ۱۱ رقم"),
 		full_name: string().required(translate.errors.required),
+		marketer: string(),
 		national_code: string().required(translate.errors.required).length(10, "حداکثر ۱۰ رقم"),
 		customer_code: number(),
 	});
@@ -70,6 +71,14 @@ const CustomerModal = ({
 				.finally(() => setLoading(false));
 		}
 	};
+	const getLastCustomerCodeData = () => {
+		axios
+			.get("/customer/manage/last_customer_code/")
+			.then((res) => {
+				setValue("customer_code", res?.data);
+			})
+			.catch((err) => {});
+	};
 	const closeModal = () => {
 		setOpen(false);
 		reset();
@@ -83,8 +92,12 @@ const CustomerModal = ({
 			setValue("full_name", defaultValue?.full_name);
 			setValue("customer_code", defaultValue?.customer_code);
 			setValue("national_code", defaultValue?.national_code);
+			setValue("marketer", defaultValue?.marketer);
 		}
 	}, [defaultValue]);
+	useEffect(() => {
+		getLastCustomerCodeData();
+	}, []);
 
 	return (
 		<Modal
@@ -134,6 +147,13 @@ const CustomerModal = ({
 					label="کد مشتری"
 					error={errors.customer_code?.message}
 					{...register("customer_code")}
+				/>
+				<Input
+					className={style.form__inputFull}
+					size="xlarge"
+					label="بازاریاب/معرف"
+					error={errors.marketer?.message}
+					{...register("marketer")}
 				/>
 			</form>
 		</Modal>

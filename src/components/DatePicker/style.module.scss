@@ -1,0 +1,319 @@
+.input {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-top: 1.4rem;
+	color: var(--bl-on-surface);
+	$inp: &;
+
+	&__label {
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.25rem; /* 142.857% */
+	}
+
+	& :global(input) {
+		height: 3rem;
+		margin: 0 !important;
+		padding: 0 1rem 0 0.75rem !important;
+		border-radius: 0.75rem;
+		border: 1px solid var(--bl-on-surface-38);
+		transition: all 0.3s;
+
+		&::placeholder {
+			opacity: 1;
+			color: var(--bl-on-surface-variant2);
+		}
+
+		&:hover {
+			border-color: var(--bl-on-surface);
+		}
+
+		&:focus {
+			caret-color: var(--bl-secondary);
+			border: 2px solid var(--bl-secondary);
+		}
+
+		&:disabled {
+			color: var(--bl-on-surface-38);
+			border-color: var(--bl-on-surface-12);
+			background-color: #fff;
+
+			&::placeholder {
+				color: var(--bl-on-surface-38);
+			}
+		}
+	}
+
+	&__help {
+		display: flex;
+		justify-content: space-between;
+		color: var(--bl-on-surface-variant2);
+		padding: 0 1rem;
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1rem; /* 133.333% */
+	}
+
+	&:global(.error) {
+		& #{$inp}__require {
+			color: var(--bl-error);
+		}
+
+		& #{$inp}__input {
+			border-color: var(--bl-error);
+		}
+
+		& #{$inp}__help {
+			color: var(--bl-error);
+		}
+	}
+
+	&_xlarge {
+		& :global(.MuiInputBase-input) {
+			height: 3.375rem;
+		}
+	}
+
+	&_large {
+		& :global(.MuiInputBase-input) {
+			height: 3.125rem;
+		}
+	}
+
+	&_small {
+		& :global(.MuiInputBase-input) {
+			height: 2.5rem;
+		}
+	}
+
+	&_xsmall {
+		& #{$inp}__label {
+			font-size: 0.75rem;
+			line-height: 1rem; /* 142.857% */
+		}
+
+		& :global(.MuiInputBase-input) {
+			height: 2.5rem;
+			border-radius: 0.5rem;
+		}
+	}
+
+	& :global(fieldset) {
+		display: none;
+	}
+
+	& :global(.MuiFormControl-root) :global(label) {
+		display: none;
+	}
+
+	& :global(.MuiInputAdornment-root) {
+		margin-left: 0;
+	}
+
+	& :global(.MuiButtonBase-root) {
+		position: absolute;
+		left: 12px;
+	}
+
+	& :global(.MuiInputBase-root) {
+		padding: 0;
+		margin: 0;
+		font-family: inherit;
+		font-weight: inherit;
+		font-size: inherit;
+		line-height: inherit;
+		letter-spacing: inherit;
+		color: inherit;
+		box-sizing: inherit;
+		position: relative;
+		cursor: text;
+		display: inline-flex;
+		-webkit-align-items: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		border-radius: 4px;
+	}
+}
+
+:global(.MuiPickersPopper-root),
+:global(.MuiDialog-root) {
+	border-radius: 28px;
+	// background: var(--bl-surface-container-lowest);
+	box-shadow: 0px 2px 24px 0px rgba(0, 0, 0, 0.12);
+
+	:global {
+		& .MuiPaper-root {
+			// width: 20.5rem !important;
+			// border-radius: 1.75rem !important;
+		}
+
+		& .MuiDateCalendar-root {
+			width: 20.5rem !important;
+		}
+
+		& .MuiTypography-overline {
+			margin-bottom: 2.25rem;
+			color: var(--bl-on-surface-variant2);
+			font-size: 0.75rem;
+			font-weight: 500;
+			line-height: 1rem; /* 133.333% */
+		}
+
+		& .MuiDayCalendar-header {
+			gap: 0.25rem;
+			padding: 0 0.75rem;
+		}
+
+		& .MuiPickersToolbar-root {
+			padding: 1rem 1.5rem 0.75rem 0.75rem;
+			border-bottom: 1px solid var(--bl-outline-variant);
+		}
+
+		& .MuiPickersCalendarHeader-root {
+			margin: 0;
+			max-height: 3.5rem;
+			padding: 1.125rem 0.75rem 1.125rem 1rem;
+		}
+
+		& .MuiDayCalendar-weekDayLabel {
+			height: 2.5rem;
+			flex: 1 0 2.5rem;
+			font-weight: 500;
+			line-height: 1.25rem;
+			margin: 0;
+			padding: 0.625rem 0.25rem;
+			color: var(--bl-on-surface-variant2);
+		}
+
+		& .MuiDatePickerToolbar-title {
+			color: var(--bl-on-surface);
+			font-size: 2rem;
+			font-weight: 500;
+			line-height: 2.5rem; /* 125% */
+		}
+
+		& .MuiPickersCalendarHeader-labelContainer {
+			margin-left: auto;
+			margin-right: 0;
+			color: var(--bl-on-surface-variant2);
+			font-size: 0.875rem;
+			font-weight: 500;
+			font-family: inherit;
+			line-height: 1.25rem; /* 142.857% */
+		}
+
+		& .MuiDayCalendar-weekContainer {
+			gap: 0.25rem;
+			padding: 0 0.75rem;
+		}
+
+		& .MuiPickersArrowSwitcher-root {
+
+      & .MuiIconButton-root {
+        margin: 0;
+
+				&:first-child,
+				&:last-child {
+					transform: rotate(180deg);
+				}
+      }
+
+      & .MuiPickersArrowSwitcher-spacer {
+        width: 1rem;
+      }
+		}
+
+		& .MuiPickersDay-root,
+		& .MuiPickersYear-yearButton {
+			font-family: inherit;
+
+			&:hover {
+				background-color: var(--bl-on-surface-8);
+			}
+
+			&:focus,
+			&:active {
+				background-color: var(--bl-on-surface-12);
+			}
+
+			&.MuiPickersDay-today {
+				color: var(--bl-primary);
+				border-color: var(--bl-primary);
+
+				&:hover {
+					background-color: var(--bl-primary-8);
+				}
+
+				&:focus,
+				&:active {
+					background-color: var(--bl-primary-12);
+				}
+
+				&:disabled {
+					color: var(--bl-on-surface);
+					background-color: #fff;
+					border-color: var(--bl-on-surface);
+				}
+			}
+
+			&.Mui-selected,
+			&.Mui-selected:hover,
+			&.Mui-selected:focus {
+				color: var(--bl-on-primary);
+				background-color: var(--bl-primary);
+			}
+		}
+
+		& .MuiPickersDay-root {
+			height: 2.5rem;
+			flex: 1 0 2.5rem;
+			font-weight: 500;
+			line-height: 1.25rem;
+			margin: 0;
+			padding: 0.625rem 0.25rem;
+
+			&:disabled {
+				color: var(--bl-on-surface);
+				background-color: #fff;
+			}
+		}
+
+		& .MuiPickersYear-yearButton {
+			height: 2.25rem;
+			flex: 1 0 4.5rem;
+			font-size: 1rem;
+			font-weight: 600;
+			line-height: 1.5rem; /* 150% */
+      color: var(--bl-on-surface-variant2);
+
+			&:disabled {
+				color: var(--bl-on-surface-variant2);
+				background-color: #fff;
+			}
+		}
+
+    & .MuiYearCalendar-root {
+			border-bottom: 1px solid var(--bl-outline-variant);
+      width: 100%;
+    }
+
+		& .MuiDialogActions-root {
+			padding: 0.5rem 0.75rem 0.75rem;
+
+			& > :not(:first-of-type) {
+				margin-left: 0;
+			}
+		}
+
+		& .MuiButton-root {
+			color: var(--bl-secondary);
+			font-size: 0.875rem;
+			font-weight: 500;
+			font-family: inherit;
+			line-height: 1.25rem; /* 142.857% */
+			padding: 0.625rem 0.75rem;
+		}
+	}
+}

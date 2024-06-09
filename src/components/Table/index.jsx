@@ -9,7 +9,7 @@ const sx = {
 	fontFamily: "inherit",
 	border: "none",
 	"& .MuiDataGrid-columnHeaders": {
-		color: "var(--bl-on-surface-variant)",
+		color: "var(--bl-on-surface-variant2)",
 		background: "var(--bl-surface-container-low)",
 		border: "none",
 		minHeight: "36px !important",
@@ -107,7 +107,7 @@ export const Table = forwardRef(function ({ className, ...rest }, ref) {
 					autoPageSize={false}
 					disablePageSize
 					disableColumnMenu
-					pageSizeOptions={[5, 10, 25, 50]}
+					pageSizeOptions={[5, 10, 15, 25]}
 					localeText={faIR.components.MuiDataGrid.defaultProps.localeText}
 					slots={{
 						noRowsOverlay: Empty,

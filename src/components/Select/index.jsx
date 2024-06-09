@@ -73,7 +73,7 @@ const menuProps = {
 				fontSize: "0.75rem",
 				padding: "0.3125rem 0.5rem",
 				borderRadius: "0.5rem",
-				color: "var(--bl-on-surface-variant)",
+				color: "var(--bl-on-surface-variant2)",
 				"&:hover": {
 					backgroundColor: "var(--bl-secondary-container)",
 				},

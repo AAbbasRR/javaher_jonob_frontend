@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button } from "src/components/Button";
 import { Input } from "src/components/Input";
 import { Modal } from "src/components/Modal";
@@ -15,7 +15,7 @@ const schema = (isUpdate) =>
 	object({
 		name: string().required(translate.errors.required),
 		weight: number().required(translate.errors.required).min(1, "وزن نباید کمتر از ۱ کیلوگرم باشد"),
-		price: number().required(translate.errors.required).min(0, "مبلغ نباید کمتر از ۰ باشد"),
+		price: string().required(translate.errors.required),
 		tax: number()
 			.required(translate.errors.required)
 			.max(100, "درصد مالیات نباید بیشتر از ۱۰۰ باشد")
@@ -34,12 +34,14 @@ const ProductModal = ({
 		register,
 		setError,
 		setValue,
+		control,
 		handleSubmit,
 		reset,
 		formState: { errors },
 	} = useForm({
 		mode: "onChange",
 		resolver: yupResolver(schema(defaultValue !== null)),
+		defaultValues: { price: 0 },
 	});
 
 	const [loading, setLoading] = useState(false);
@@ -80,7 +82,6 @@ const ProductModal = ({
 	};
 
 	useEffect(() => {
-		console.log(defaultValue);
 		if (defaultValue !== null) {
 			setEditItemID(defaultValue?.id);
 			setValue("name", defaultValue?.name);
@@ -125,13 +126,23 @@ const ProductModal = ({
 					error={errors.weight?.message}
 					{...register("weight")}
 				/>
-				<Input
-					className={style.form__input}
-					size="xlarge"
-					label="قیمت(تومان)"
-					required
-					error={errors.price?.message}
-					{...register("price")}
+				<Controller
+					control={control}
+					name="price"
+					render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
+						<Input
+							className={style.form__input}
+							size="xlarge"
+							label="قیمت(ریال)"
+							required
+							type="text"
+							error={error?.message}
+							id="price"
+							onBlur={onBlur}
+							value={value.toLocaleString()}
+							onChange={(e) => onChange(Number(e.target.value.replace(",", "")))}
+						/>
+					)}
 				/>
 				<Input
 					className={style.form__input}

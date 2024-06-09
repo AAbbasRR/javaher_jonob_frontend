@@ -275,8 +275,8 @@ $assets: "./assets";
 }
 
 :root {
-	--bl-primary: #f9e2e7;
-	--bl-on-primary: #000000;
+	--bl-primary: #0073e6;
+	--bl-on-primary: #fefefe;
 	--bl-primary-container: #f4c6cf;
 	--bl-on-primary-container: #2a0910;
 
@@ -335,19 +335,20 @@ $assets: "./assets";
 	--bl-error-12: rgba(255, 10, 0, 0.12);
 	--bl-on-error-12: rgba(255, 255, 255, 0.12);
 
-	--bl-surface: #f9fafa;
+	--bl-surface: #2b2f3d;
 	--bl-surface-dim: #d5d7de;
 	--bl-surface-bright: #f9fafa;
-	--bl-surface-container-lowest: #ffffff;
-	--bl-surface-container-low: #f3f3f5;
+	--bl-surface-container-lowest: #fff;
+	--bl-surface-container-low: #aeaeae;
 	--bl-surface-container: #ebedf0;
 	--bl-surface-container-high: #e6e8eb;
 	--bl-surface-container-highest: #e1e3e5;
 
 	--bl-on-surface: #15171a;
-	--bl-on-surface-variant: #6c7280;
+	--bl-on-surface-variant: #ededed;
+	--bl-on-surface-variant2: #15171a;
 	--bl-outline: #a6aab2;
-	--bl-outline-variant: #e1e3e5;
+	--bl-outline-variant: #2b2f3d;
 
 	--bl-on-surface-8: rgba(23, 25, 28, 0.08);
 	--bl-on-surface-12: rgba(23, 25, 28, 0.12);

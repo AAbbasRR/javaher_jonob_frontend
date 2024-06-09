@@ -3,10 +3,9 @@
 	justify-content: center;
 	align-items: center;
 	flex-shrink: 0;
-	padding-inline: 1.5rem;
+	padding-inline: 1rem;
 	gap: 0.5rem;
-	border-radius: 3.5rem;
-	border: 1px solid #000;
+	border-radius: 1rem;
 	color: var(--bl-on-primary);
 	background: var(--bl-primary);
 	font-family: inherit;
@@ -14,8 +13,8 @@
 	font-weight: 500;
 	line-height: 1.25rem; /* 142.857% */
 	text-wrap: nowrap;
-	height: 3rem;
-	min-width: 2.25rem;
+	height: 2rem;
+	min-width: 2rem;
 	user-select: none;
 	transition: all 0.3s;
 	cursor: pointer;
@@ -65,12 +64,12 @@
 	}
 
 	&_secondary {
-		color: #fff;
+		color: #212121;
 		background: var(--bl-secondary);
 	}
 
 	&_outline {
-		background: #fff;
+		background: #212121;
 	}
 
 	&_outline:hover,
@@ -84,7 +83,7 @@
 	}
 
 	&_outline:disabled {
-		background: #fff;
+		background: #212121;
 		border-color: var(--bl-on-surface-12);
 	}
 

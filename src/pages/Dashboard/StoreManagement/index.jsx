@@ -7,6 +7,7 @@ import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
+import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
@@ -18,7 +19,7 @@ const StoreManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [value, setValue] = useState("");
 	const [storeModalOpen, setStoreModalOpen] = useState(false);
 	const [editStoreData, setEditStoreData] = useState(null);
@@ -59,6 +60,7 @@ const StoreManagement = () => {
 			.finally(() => setLoading(false));
 	};
 	const deleteStore = (id) => {
+		setLoading(true);
 		axios
 			.delete("/store/manage/update_delete/", {
 				params: { pk: id },
@@ -87,18 +89,21 @@ const StoreManagement = () => {
 		{
 			headerName: "ردیف",
 			field: "index",
+			minWidth: 100,
 			sortable: false,
 		},
 		{
 			headerName: "نام انبار",
 			field: "name",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "تاریخ ایجاد",
 			field: "formatted_date_joined",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => new Date(row?.formatted_create_at).toLocaleString("fa-IR"),
 		},
@@ -158,6 +163,8 @@ const StoreManagement = () => {
 									onPaginationModelChange={setPaginationModel}
 								/>
 							</div>
+						) : loading ? (
+							<Spin size={50} />
 						) : (
 							<Empty />
 						)}

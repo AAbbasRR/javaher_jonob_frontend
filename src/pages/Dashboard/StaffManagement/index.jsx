@@ -10,6 +10,7 @@ import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
+import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
@@ -25,7 +26,7 @@ const StaffManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
@@ -62,6 +63,7 @@ const StaffManagement = () => {
 			.finally(() => setLoading(false));
 	};
 	const deleteAdmin = (id) => {
+		setLoading(true);
 		axios
 			.delete("/user/manage/staff/update_delete/", {
 				params: { pk: id },
@@ -96,30 +98,35 @@ const StaffManagement = () => {
 			headerName: "نام",
 			field: "first_name",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "نام خانوادگی",
 			field: "last_name",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "نام کاربری",
 			field: "username",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 		},
 		{
 			headerName: "نوع",
 			field: "type_display",
 			flex: 1,
+			minWidth: 100,
 			sortable: false,
 		},
 		{
 			headerName: "تاریخ ایجاد",
 			field: "formatted_date_joined",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => new Date(row?.formatted_date_joined).toLocaleString("fa-IR"),
 		},
@@ -127,6 +134,7 @@ const StaffManagement = () => {
 			headerName: "تاریخ آخرین ورود",
 			field: "formatted_last_login",
 			flex: 1,
+			minWidth: 150,
 			sortable: false,
 			renderCell: ({ row }) => {
 				if (row?.formatted_last_login === null) {
@@ -203,6 +211,8 @@ const StaffManagement = () => {
 									onPaginationModelChange={setPaginationModel}
 								/>
 							</div>
+						) : loading ? (
+							<Spin size={50} />
 						) : (
 							<Empty />
 						)}

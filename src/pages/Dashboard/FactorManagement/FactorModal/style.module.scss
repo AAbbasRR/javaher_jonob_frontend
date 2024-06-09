@@ -38,6 +38,10 @@
 			width: 65% !important;
 		}
 
+		&Half{
+			width: 48% !important;
+		}
+
 		&Full {
 			width: 99%;
 		}
@@ -68,7 +72,7 @@
 	gap: 1.25rem;
 }
 
-@media screen and (max-width: 597px) {
+@media screen and (max-width: 627px) {
 	.form {
 		&__input {
 			width: 99% !important;
@@ -110,8 +114,8 @@
 		position: relative;
 
 		&:nth-child(even) {
-			border-radius: 1rem;
-			background: var(--bl-surface);
+			border-radius: 0.5rem;
+			background: var(--bl-surface-bright);
 		}
 	}
 
@@ -140,7 +144,7 @@
 			width: 50rem;
 			text-wrap: wrap;
 			text-align: center;
-			color: var(--bl-on-surface-variant);
+			color: var(--bl-on-surface-variant2);
 		}
 	}
 }

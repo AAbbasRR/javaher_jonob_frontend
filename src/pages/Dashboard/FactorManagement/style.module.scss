@@ -70,7 +70,6 @@
 	flex: 1;
 	display: none;
 	flex-direction: column;
-	position: fixed;
 	inset: 0;
 	padding: 1rem;
 	background: #fff;
@@ -79,6 +78,21 @@
 	&:global(.active) {
 		display: flex;
 	}
+}
+
+.custumerData {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.paymentStatusSuccess {
+	color: #66bb6a;
+}
+
+.paymentStatusError {
+	color: #f44366;
 }
 
 .title {
@@ -104,5 +118,12 @@
 @media (min-width: 1200px) {
 	.wrapper {
 		padding: 0;
+	}
+}
+
+@media (max-width: 550px) {
+	.header {
+		flex-direction: column !important;
+		gap: 3rem;
 	}
 }

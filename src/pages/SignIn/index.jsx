@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import avatar from "src/assets/images/mask-group.png";
 import useAuthStore from "src/store";
 import { Username } from "./components/Username";
 import style from "./style.module.scss";
@@ -22,7 +21,6 @@ const SignIn = () => {
 			<div className={style.main}>
 				<div className={style.header}>
 					<div className={style.title}>
-						<img src={avatar} className={style.title__icon} alt="avatar" />
 						ورود به حساب مدیریت
 					</div>
 

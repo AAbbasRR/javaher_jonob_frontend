@@ -8,6 +8,7 @@ import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
 import { Modal } from "src/components/Modal";
+import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
@@ -19,7 +20,7 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 25, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
 	const [value, setValue] = useState("");
 	const [reload, setReload] = useState(false);
 	const [addressModalOpen, setAddressModalOpen] = useState(false);
@@ -186,6 +187,8 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 										onPaginationModelChange={setPaginationModel}
 									/>
 								</div>
+							) : loading ? (
+								<Spin size={50} />
 							) : (
 								<Empty />
 							)}

@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Autocomplete, Popper, TextField, Tooltip } from "@mui/material";
+import { Autocomplete, Divider, IconButton, Popper, TextField, Tooltip } from "@mui/material";
 import _debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import iconRemove from "src/assets/icons/icon-remove.svg";
 import { Button } from "src/components/Button";
+import { DatePicker } from "src/components/DatePicker";
 import { Input } from "src/components/Input";
 import { Modal } from "src/components/Modal";
 import { Select } from "src/components/Select";
@@ -15,6 +17,7 @@ import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
 import { boolean, number, object, string } from "yup";
+import AddressModal from "./AddressModal";
 import style from "./style.module.scss";
 
 const sxProps = {
@@ -44,20 +47,14 @@ const sxProps = {
 const schema = () =>
 	object({
 		tracking_code: string(),
-		payment_type: string().required(translate.errors.required),
-		payment_status: boolean().required(translate.errors.required),
+		discount_value: string().required(translate.errors.required),
+		discount_is_percent: boolean().required(translate.errors.required),
+		factor_date: string().required(translate.errors.required),
 		customer: number().required(translate.errors.required),
-		marketer: number(),
 		address: number().required(translate.errors.required),
 		store: number().required(translate.errors.required),
 		description: string(),
 	});
-
-const factorPaymentTypeOptions = [
-	{ name: "چک", value: "check" },
-	{ name: "نقد", value: "cash" },
-	{ name: "اقساط", value: "installment" },
-];
 
 const FactorModal = ({
 	open,
@@ -81,10 +78,10 @@ const FactorModal = ({
 		mode: "onChange",
 		resolver: yupResolver(schema(defaultValue !== null)),
 		defaultValues: {
-			payment_status: true,
+			discount_value: 0,
+			discount_is_percent: false,
 		},
 	});
-	console.log(errors);
 
 	const [loading, setLoading] = useState(false);
 	const [editItemID, setEditItemID] = useState(null);
@@ -93,12 +90,18 @@ const FactorModal = ({
 	const [customerSearchValue, setCustomerSearchValue] = useState("");
 	const [customerAddressData, setCustomerAddressData] = useState([]);
 	const [customerAddressSearchValue, setCustomerAddressSearchValue] = useState("");
-	const [MarketerData, setMarketerData] = useState([]);
-	const [marketerSearchValue, setMarketerSearchValue] = useState("");
 	const [productData, setProductData] = useState([]);
 	const [productDataOption, setProductDataOption] = useState([]);
 	const [productSearchValueData, setProductSearchValue] = useState("");
 	const [factorProducts, setFactorProducts] = useState([]);
+	const [addAddressModalOpen, setAddAddressModalOpen] = useState(false);
+	const [reloadAddresses, setReloadAddresses] = useState(false);
+
+	const sumOfFactor = factorProducts?.reduce((sum, item) => {
+		return Math.ceil(
+			sum + Math.ceil((item?.price + item?.price * (item?.tax / 100)) * item?.count),
+		);
+	}, 0);
 
 	const debouncedCustomerSearch = useMemo(
 		() =>
@@ -113,13 +116,6 @@ const FactorModal = ({
 				setCustomerAddressSearchValue(value);
 			}, 300),
 		[customerAddressSearchValue],
-	);
-	const debouncedMarketerSearch = useMemo(
-		() =>
-			_debounce((value) => {
-				setMarketerSearchValue(value);
-			}, 300),
-		[marketerSearchValue],
 	);
 	const debouncedProductSearch = useMemo(
 		() =>
@@ -184,43 +180,29 @@ const FactorModal = ({
 	};
 	const getCustomerAddressData = () => {
 		const customerId = getValues("customer");
-		if (customerId !== undefined) {
-			axios
-				.get("/customer/manage/address/list_create/", {
-					params: { search: customerAddressSearchValue, customer: watch("customer") },
-				})
-				.then((res) => {
-					const customerAddressDataVar = [];
-					res?.data?.results?.map((item) => {
-						customerAddressDataVar.push({
-							label: `${item?.full_address}`,
-							value: item?.id,
-							key: item?.id,
-						});
-					});
-					setCustomerAddressData([...customerAddressDataVar]);
-				})
-				.catch((err) => {});
-		}
-	};
-	const getMarketerData = () => {
 		axios
-			.get("/customer/manage/list_create/", { params: { search: marketerSearchValue } })
+			.get("/customer/manage/address/list_create/", {
+				params:
+					customerId !== undefined
+						? { search: customerAddressSearchValue, customer: customerId }
+						: { search: customerAddressSearchValue },
+			})
 			.then((res) => {
-				const marketerDataVar = [];
+				const customerAddressDataVar = [];
 				res?.data?.results?.map((item) => {
-					marketerDataVar.push({
-						label: `${item?.customer_code} - ${item?.full_name} - ${item?.mobile_number}`,
+					customerAddressDataVar.push({
+						label: `${item?.country} - ${item?.state} - ${item?.city} - ${item?.street} - ${item?.full_address}`,
 						value: item?.id,
 						key: item?.id,
 					});
 				});
-				setMarketerData([...marketerDataVar]);
+				setCustomerAddressData([...customerAddressDataVar]);
 			})
 			.catch((err) => {});
 	};
 	const onSubmit = (data) => {
 		setLoading(true);
+		data.factor_date = new Date(data?.factor_date).toISOString()?.slice(0, 10);
 		data.factor_items = [];
 		factorProducts.map((item) => {
 			data.factor_items.push({
@@ -244,7 +226,7 @@ const FactorModal = ({
 				.finally(() => setLoading(false));
 		} else {
 			axios
-				.put(`/product/manage/update_delete/?pk=${editItemID}`, data)
+				.put(`/factor/manage/update_delete/?pk=${editItemID}`, data)
 				.then((res) => {
 					closeModal();
 					notify("با موفقیت ویرایش شد", "success");
@@ -268,10 +250,6 @@ const FactorModal = ({
 	};
 	const filterCustomerAddressOptions = (options, { inputValue }) => {
 		debouncedCustomerAddressSearch(inputValue);
-		return options;
-	};
-	const filterMarketerOptions = (options, { inputValue }) => {
-		debouncedMarketerSearch(inputValue);
 		return options;
 	};
 	const filterProductOptions = (options, { inputValue }) => {
@@ -307,7 +285,6 @@ const FactorModal = ({
 	useEffect(() => {
 		getStoreData();
 		getCustomerData();
-		getMarketerData();
 		getProductData();
 	}, []);
 	useEffect(() => {
@@ -316,15 +293,8 @@ const FactorModal = ({
 		}
 	}, [customerSearchValue]);
 	useEffect(() => {
-		if (watch("customer") !== null) {
-			getCustomerAddressData();
-		}
-	}, [watch("customer"), customerAddressSearchValue]);
-	useEffect(() => {
-		if (marketerSearchValue !== "") {
-			getMarketerData();
-		}
-	}, [marketerSearchValue]);
+		getCustomerAddressData();
+	}, [watch("customer"), customerAddressSearchValue, reloadAddresses]);
 	useEffect(() => {
 		if (productSearchValueData !== "") {
 			getProductData();
@@ -334,13 +304,15 @@ const FactorModal = ({
 		if (defaultValue !== null) {
 			setEditItemID(defaultValue?.id);
 			setValue("tracking_code", defaultValue?.tracking_code);
-			setValue("payment_type", defaultValue?.payment_type);
-			setValue("payment_status", defaultValue?.payment_status);
+			setValue("factor_date", defaultValue?.factor_date);
+			setValue("discount_is_percent", defaultValue?.discount_is_percent);
+			setValue("discount_value", defaultValue?.discount_value);
 			setValue("customer", defaultValue?.customer);
 			setValue("marketer", defaultValue?.marketer);
 			setValue("address", defaultValue?.address);
 			setValue("store", defaultValue?.store);
 			setValue("description", defaultValue?.description);
+			setFactorProducts(defaultValue?.factor_items);
 		}
 	}, [defaultValue]);
 
@@ -370,25 +342,34 @@ const FactorModal = ({
 					error={errors.tracking_code?.message}
 					{...register("tracking_code")}
 				/>
+				<DatePicker
+					required
+					size="xlarge"
+					placeholder="تاریخ فاکتور"
+					error={errors.factor_date?.message}
+					helperText="روز/ماه/سال"
+					className={style.form__input}
+					name="factor_date"
+					control={control}
+				/>
 				<Select
 					className={style.form__input}
 					size="xlarge"
-					label="نوع پرداخت"
+					label="انبار"
 					required
-					options={factorPaymentTypeOptions}
-					error={errors.payment_type?.message}
-					name="payment_type"
+					options={storeData}
+					error={errors.store?.message}
+					name="store"
 					control={control}
 				/>
-				<div className={style.payment_status}>
-					پرداخت شده؟
-					<Switch
-						name="payment_status"
-						checked={watch("payment_status")}
-						onChange={(e) => setValue("payment_status", e.target.checked)}
-					/>
+				<div className={style.title}>
+					مشخصات مشتری
+					<Tooltip title="اضافه کردن آدرس جدید">
+						<IconButton className={style.IconButton} onClick={() => setAddAddressModalOpen(true)}>
+							<img src={IconAdd} alt="add-icon" />
+						</IconButton>
+					</Tooltip>
 				</div>
-				<div className={style.title}>مشخصات مشتری</div>
 				<RightToLeftLayout>
 					<Controller
 						control={control}
@@ -398,7 +379,7 @@ const FactorModal = ({
 						}}
 						render={({ field: { value, onChange }, fieldState: { error } }) => (
 							<Autocomplete
-								className={style.form__input}
+								className={style.form__inputHalf}
 								disablePortal
 								fullWidth
 								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
@@ -430,7 +411,7 @@ const FactorModal = ({
 						name="address"
 						render={({ field: { value, onChange }, fieldState: { error } }) => (
 							<Autocomplete
-								className={style.form__input}
+								className={style.form__inputHalf}
 								disablePortal
 								fullWidth
 								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
@@ -457,50 +438,8 @@ const FactorModal = ({
 							/>
 						)}
 					/>
-					<Controller
-						control={control}
-						name="marketer"
-						render={({ field: { value, onChange }, fieldState: { error } }) => (
-							<Autocomplete
-								className={style.form__input}
-								disablePortal
-								fullWidth
-								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
-								filterOptions={filterMarketerOptions}
-								id="marketer"
-								size="small"
-								options={MarketerData}
-								renderInput={(params) => (
-									<>
-										<TextField
-											error={!!error}
-											helperText={error ? error.message : null}
-											label="بازاریاب"
-											size="small"
-											{...params}
-											{...(params.inputProps.value = value
-												? MarketerData.find((item) => item.value === value)?.label
-												: value)}
-											sx={sxProps}
-										/>
-									</>
-								)}
-								onChange={(e, newValue) => onChange(newValue.value)}
-							/>
-						)}
-					/>
 				</RightToLeftLayout>
 				<div className={style.title}>جزئیات فاکتور</div>
-				<Select
-					className={style.form__input}
-					size="xlarge"
-					label="انبار"
-					required
-					options={storeData}
-					error={errors.store?.message}
-					name="store"
-					control={control}
-				/>
 				<Input
 					className={style.form__inputBig}
 					size="xlarge"
@@ -509,15 +448,32 @@ const FactorModal = ({
 					error={errors.description?.message}
 					{...register("description")}
 				/>
+				<div className={style.form__input}>
+					<Input
+						size="xlarge"
+						label="تخفیف"
+						error={errors.discount_value?.message}
+						{...register("discount_value")}
+					/>
+					<div className={style.payment_status}>
+						تخفیف به صورت درصدی؟
+						<Switch
+							name="discount_is_percent"
+							checked={watch("discount_is_percent")}
+							onChange={(e) => setValue("discount_is_percent", e.target.checked)}
+						/>
+					</div>
+				</div>
 				<div className={style.wrapper}>
 					<div className={style.info}>
 						<div className={style.info__headrow}>
 							<div className={style.info__start}>
 								<span>محصول</span>
-								<span>قیمت واحد</span>
+								<span>قیمت واحد(ریال)</span>
 								<span>تعداد</span>
 								<span>درصد مالیات</span>
-								<span>جمع قیمت</span>
+								<span>ارزش افزوده(ریال)</span>
+								<span>جمع قیمت(ریال)</span>
 							</div>
 						</div>
 						{factorProducts.map((item, index) => (
@@ -570,6 +526,7 @@ const FactorModal = ({
 											/>
 										}
 									</span>
+									<span>{(item?.price * (item?.tax / 100) * item?.count).toLocaleString()}</span>
 									<span>
 										{(
 											(item?.price + item?.price * (item?.tax / 100)) *
@@ -603,11 +560,47 @@ const FactorModal = ({
 								<span>0</span>
 								<span>0</span>
 								<span>0</span>
+								<span>0</span>
+							</div>
+						</div>
+						<Divider className={style.divider} />
+						<div className={style.info__headrow}>
+							<div className={style.info__start}>
+								<span>
+									مبلغ کل(ریال):
+									<br />
+									{sumOfFactor.toLocaleString()}
+								</span>
+								<Divider orientation="vertical" flexItem />
+								<span>
+									تخفیف(ریال):
+									<br />
+									{watch("discount_is_percent")
+										? (sumOfFactor * (watch("discount_value") / 100)).toLocaleString()
+										: watch("discount_value")}
+								</span>
+								<Divider orientation="vertical" flexItem />
+								<span>
+									مبلغ قابل پرداخت(ریال):
+									<br />
+									{(
+										sumOfFactor -
+										(watch("discount_is_percent")
+											? sumOfFactor * (watch("discount_value") / 100)
+											: watch("discount_value"))
+									).toLocaleString()}
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</form>
+			<AddressModal
+				open={addAddressModalOpen}
+				setOpen={setAddAddressModalOpen}
+				reload={reloadAddresses}
+				setReload={setReloadAddresses}
+			/>
 		</Modal>
 	);
 };

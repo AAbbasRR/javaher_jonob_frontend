@@ -22,7 +22,7 @@
 	}
 
 	&__label {
-		color: var(--bl-on-surface-variant);
+		color: var(--bl-on-surface-variant2);
 		font-size: 0.875rem;
 		font-weight: 500;
 		line-height: 1.25rem; /* 142.857% */
@@ -66,7 +66,7 @@
 		transition: all 0.3s;
 
 		&::placeholder {
-			color: var(--bl-on-surface-variant);
+			color: var(--bl-on-surface-variant2);
 		}
 
 		&:hover {
@@ -101,7 +101,7 @@
 	&__help {
 		display: flex;
 		justify-content: space-between;
-		color: var(--bl-on-surface-variant);
+		color: var(--bl-on-surface-variant2);
 		padding: 0 1rem;
 		font-size: 0.75rem;
 		font-weight: 500;

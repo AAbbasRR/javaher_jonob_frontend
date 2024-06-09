@@ -46,7 +46,6 @@ const ChangePassword = () => {
 				reset();
 			})
 			.catch((err) => {
-				console.log(err)
 				handleError({ err, setError });
 			})
 			.finally(() => setLoading(false));

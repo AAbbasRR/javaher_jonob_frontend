@@ -26,7 +26,7 @@ const StaffManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 1 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
@@ -51,11 +51,11 @@ const StaffManagement = () => {
 
 		axios
 			.get("/user/manage/staff/list_create/", {
-				params: { search: searchValue, page: page + 1, page_size: pageSize },
+				params: { search: searchValue, page: page, page_size: pageSize },
 			})
 			.then((res) => {
 				setData(res.data.results);
-				setCount(res?.data?.count_all);
+				setCount(res?.data?.total);
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -87,7 +87,7 @@ const StaffManagement = () => {
 		}
 	}, []);
 	useEffect(() => {
-		setPaginationModel((e) => ({ ...e, page: 0 }));
+		setPaginationModel((e) => ({ ...e, page: 1 }));
 	}, [searchValue]);
 	useEffect(() => {
 		getData();
@@ -203,12 +203,11 @@ const StaffManagement = () => {
 							<div className={style.table}>
 								<Table
 									rows={data}
-									rowCount={count}
 									loading={loading}
 									columns={columns}
-									paginationMode="server"
-									paginationModel={paginationModel}
-									onPaginationModelChange={setPaginationModel}
+									paginationCount={count}
+									pagination={paginationModel}
+									paginationChange={setPaginationModel}
 								/>
 							</div>
 						) : loading ? (

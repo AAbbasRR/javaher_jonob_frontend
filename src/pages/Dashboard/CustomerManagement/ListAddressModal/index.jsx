@@ -20,7 +20,7 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 1 });
 	const [value, setValue] = useState("");
 	const [reload, setReload] = useState(false);
 	const [addressModalOpen, setAddressModalOpen] = useState(false);
@@ -49,13 +49,13 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 				params: {
 					customer: customerID,
 					search: searchValue,
-					page: page + 1,
+					page: page,
 					page_size: pageSize,
 				},
 			})
 			.then((res) => {
 				setData(res.data.results);
-				setCount(res?.data?.count_all);
+				setCount(res?.data?.total);
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -81,7 +81,7 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 	};
 
 	useEffect(() => {
-		setPaginationModel((e) => ({ ...e, page: 0 }));
+		setPaginationModel((e) => ({ ...e, page: 1 }));
 	}, [searchValue]);
 	useEffect(() => {
 		if (customerID) {

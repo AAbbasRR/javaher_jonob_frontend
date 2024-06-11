@@ -140,7 +140,7 @@ const ProductModal = ({
 							id="price"
 							onBlur={onBlur}
 							value={value.toLocaleString()}
-							onChange={(e) => onChange(Number(e.target.value.replace(",", "")))}
+							onChange={(e) => onChange(Number(e.target.value.replaceAll(",", "")))}
 						/>
 					)}
 				/>

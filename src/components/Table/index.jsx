@@ -1,6 +1,8 @@
 import { ThemeProvider, createTheme, useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import { arSD, faIR } from "@mui/x-data-grid/locales";
+import Pagination from "@mui/material/Pagination";
+import Divider from "@mui/material/Divider";
 import { forwardRef, useMemo } from "react";
 import style from "./style.module.scss";
 import { Empty } from "src/components/Empty";
@@ -73,7 +75,10 @@ const sx = {
 	},
 };
 
-export const Table = forwardRef(function ({ className, ...rest }, ref) {
+export const Table = forwardRef(function (
+	{ className, paginationCount, pagination, paginationChange, ...rest },
+	ref,
+) {
 	const existingTheme = useTheme();
 	const theme = useMemo(
 		() =>
@@ -97,6 +102,10 @@ export const Table = forwardRef(function ({ className, ...rest }, ref) {
 		[existingTheme],
 	);
 
+	const paginationOnChange = (event, value) => {
+		paginationChange({ ...pagination, page: value });
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<div className={`${style.table} ${className}`}>
@@ -104,15 +113,19 @@ export const Table = forwardRef(function ({ className, ...rest }, ref) {
 					sx={sx}
 					ref={ref}
 					rowHeight={68}
-					autoPageSize={false}
-					disablePageSize
-					disableColumnMenu
-					pageSizeOptions={[5, 10, 15, 25]}
+					hideFooter
 					localeText={faIR.components.MuiDataGrid.defaultProps.localeText}
 					slots={{
 						noRowsOverlay: Empty,
 					}}
 					{...rest}
+				/>
+				<Divider />
+				<Pagination
+					count={paginationCount}
+					page={pagination?.page}
+					onChange={paginationOnChange}
+					className={style.pagination}
 				/>
 			</div>
 		</ThemeProvider>

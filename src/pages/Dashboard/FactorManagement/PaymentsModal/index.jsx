@@ -153,7 +153,7 @@ const PaymentsModal = ({ open, setOpen, reload, setReload, defaultValues = null 
 						<Input
 							className={style.form__input}
 							size="xlarge"
-							label="شماره فاکتور"
+							label="کد پیگیری"
 							error={errors.tracking_code?.message}
 							{...register("tracking_code")}
 						/>
@@ -171,24 +171,26 @@ const PaymentsModal = ({ open, setOpen, reload, setReload, defaultValues = null 
 							control={control}
 							name="amount"
 							render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
-								<Input
-									className={style.form__input}
-									size="xlarge"
-									label="مقدار(ریال)"
-									required
-									type="text"
-									error={error?.message}
-									id="amount"
-									onBlur={onBlur}
-									value={value.toLocaleString()}
-									onChange={(e) => onChange(Number(e.target.value.replace(",", "")))}
-								/>
+								<>
+									<Input
+										className={style.form__input}
+										size="xlarge"
+										label="مقدار(ریال)"
+										required
+										type="text"
+										error={error?.message}
+										id="amount"
+										onBlur={onBlur}
+										value={value.toLocaleString()}
+										onChange={(e) => onChange(Number(e.target.value.replaceAll(",", "")))}
+									/>
+								</>
 							)}
 						/>
 						<DatePicker
 							required
 							size="xlarge"
-							placeholder="تاریخ پرداخت"
+							label="تاریخ پرداخت"
 							error={errors.payment_date?.message}
 							helperText="روز/ماه/سال"
 							className={style.form__input}

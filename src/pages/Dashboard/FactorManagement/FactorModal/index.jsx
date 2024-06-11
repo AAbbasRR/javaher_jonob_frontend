@@ -278,7 +278,7 @@ const FactorModal = ({
 	const changeItem = (event, item, field_name) => {
 		const factorProductsVar = [...factorProducts];
 		const productIndex = factorProductsVar.findIndex((node) => node.id === item.id);
-		factorProductsVar[productIndex][field_name] = Number(event.target.value.replace(",", ""));
+		factorProductsVar[productIndex][field_name] = Number(event.target.value.replaceAll(",", ""));
 		setFactorProducts([...factorProductsVar]);
 	};
 
@@ -345,7 +345,7 @@ const FactorModal = ({
 				<DatePicker
 					required
 					size="xlarge"
-					placeholder="تاریخ فاکتور"
+					label="تاریخ فاکتور"
 					error={errors.factor_date?.message}
 					helperText="روز/ماه/سال"
 					className={style.form__input}

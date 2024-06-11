@@ -24,7 +24,7 @@ const ProductManagement = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 1 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
@@ -49,14 +49,14 @@ const ProductManagement = () => {
 
 		axios
 			.get("/product/manage/list_create/", {
-				params: { search: searchValue, page: page + 1, page_size: pageSize },
+				params: { search: searchValue, page: page, page_size: pageSize },
 			})
 			.then((res) => {
 				res?.data?.results?.map((node, index) => {
 					node.index = index + 1;
 				});
 				setData(res.data.results);
-				setCount(res?.data?.count_all);
+				setCount(res?.data?.total);
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -88,7 +88,7 @@ const ProductManagement = () => {
 		}
 	}, []);
 	useEffect(() => {
-		setPaginationModel((e) => ({ ...e, page: 0 }));
+		setPaginationModel((e) => ({ ...e, page: 1 }));
 	}, [searchValue]);
 	useEffect(() => {
 		getData();
@@ -188,12 +188,11 @@ const ProductManagement = () => {
 							<div className={style.table}>
 								<Table
 									rows={data}
-									rowCount={count}
 									loading={loading}
 									columns={columns}
-									paginationMode="server"
-									paginationModel={paginationModel}
-									onPaginationModelChange={setPaginationModel}
+									paginationCount={count}
+									pagination={paginationModel}
+									paginationChange={setPaginationModel}
 								/>
 							</div>
 						) : loading ? (

@@ -2,18 +2,15 @@ import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import _debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import iconReject from "src/assets/icons/icon-chips-danger.svg";
 import iconAccept from "src/assets/icons/icon-chips-success.svg";
 import IconDelete from "src/assets/icons/icon-delete.svg";
 import IconEdit from "src/assets/icons/icon-edit.svg";
 import iconInfo from "src/assets/icons/icon-info.svg";
-import {
-	default as IconSearch,
-	default as iconPayment,
-} from "src/assets/icons/icon-input-search.svg";
+import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
-import iconDetail from "src/assets/icons/icon-search-document.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
 import { Spin } from "src/components/Spin";
@@ -22,24 +19,39 @@ import useAuthStore from "src/store";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import FactorModal from "./FactorModal";
+import FilterModal from "./FilterModal";
 import PaymentsModal from "./PaymentsModal";
 import style from "./style.module.scss";
 
 const FactorManagement = () => {
 	const { userInfo } = useAuthStore();
 	const navigate = useNavigate();
+	const {
+		control,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm({
+		mode: "onChange",
+	});
 
 	const [data, setData] = useState([]);
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
-	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 0 });
+	const [paginationModel, setPaginationModel] = useState({ pageSize: 15, page: 1 });
 	const [value, setValue] = useState("");
 	const [adminModalOpen, setAdminModalOpen] = useState(false);
 	const [editAdminData, setEditAdminData] = useState(null);
 	const [paymentsModalOpen, setPaymentsModalOpen] = useState(false);
 	const [paymentsData, setPaymentsData] = useState(null);
 	const [reload, setReload] = useState(false);
+	const [filterModal, setFilterModal] = useState(false);
+	const [filterData, setFilterData] = useState({
+		factor_date_after: "",
+		factor_date_before: "",
+		payment_status: "",
+	});
 
 	const debouncedSearch = useMemo(
 		() =>
@@ -60,11 +72,18 @@ const FactorManagement = () => {
 
 		axios
 			.get("/factor/manage/list_create/", {
-				params: { search: searchValue, page: page + 1, page_size: pageSize },
+				params: {
+					search: searchValue,
+					page: page,
+					page_size: pageSize,
+					factor_date_after: filterData.factor_date_after,
+					factor_date_before: filterData.factor_date_before,
+					payment_status: filterData.payment_status,
+				},
 			})
 			.then((res) => {
 				setData(res.data.results);
-				setCount(res?.data?.count_all);
+				setCount(res?.data?.total);
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -103,6 +122,27 @@ const FactorManagement = () => {
 				handleError({ err });
 			});
 	};
+	const getSubmitFilter = (data) => {
+		let after_date = new Date(data?.factor_date_after);
+		after_date.setDate(after_date.getDate() + 1);
+		data.factor_date_after = after_date.toISOString()?.slice(0, 10);
+
+		let before_date = new Date(data?.factor_date_before);
+		before_date.setDate(before_date.getDate() + 1);
+		data.factor_date_before = before_date.toISOString()?.slice(0, 10);
+
+		setFilterData({ ...data });
+		setFilterModal(false);
+	};
+	const resetFilter = () => {
+		reset();
+		setFilterData({
+			factor_date_after: "",
+			factor_date_before: "",
+			payment_status: "",
+		});
+		setFilterModal(false);
+	};
 
 	useEffect(() => {
 		if (userInfo?.is_superuser === false) {
@@ -110,11 +150,11 @@ const FactorManagement = () => {
 		}
 	}, []);
 	useEffect(() => {
-		setPaginationModel((e) => ({ ...e, page: 0 }));
+		setPaginationModel((e) => ({ ...e, page: 1 }));
 	}, [searchValue]);
 	useEffect(() => {
 		getData();
-	}, [reload, paginationModel]);
+	}, [reload, paginationModel, filterData]);
 
 	const columns = [
 		{
@@ -158,6 +198,7 @@ const FactorManagement = () => {
 		},
 		{
 			headerName: "وضعیت پرداخت",
+			field: "payment_status",
 			flex: 1,
 			minWidth: 130,
 			sortable: false,
@@ -202,7 +243,7 @@ const FactorManagement = () => {
 				</div>
 			),
 		},
-		{
+		["superuser", "staff", "secretary"].includes(userInfo.type) && {
 			headerName: "پرداخت / چاپ فاکتور",
 			field: "payment",
 			flex: 1,
@@ -217,7 +258,7 @@ const FactorManagement = () => {
 					</Tooltip>
 					<Tooltip title="دریافت/پرداخت">
 						<IconButton className={style.IconButton} onClick={() => paymentsModal(row)}>
-							<img src={iconPayment} alt="payment-icon" />
+							<img src={IconSearch} alt="payment-icon" />
 						</IconButton>
 					</Tooltip>
 				</div>
@@ -275,25 +316,29 @@ const FactorManagement = () => {
 									</IconButton>
 								</Tooltip>
 							</div>
-							<Input
-								size="small"
-								value={value}
-								className={style.input}
-								onChange={handleChange}
-								placeholder="جستجو..."
-								rightIcon={<img src={IconSearch} alt="search-icon" />}
-							/>
+							<div className={style.row}>
+								<Button variant="contained" onClick={() => setFilterModal(true)}>
+									فیلتر
+								</Button>
+								<Input
+									size="small"
+									value={value}
+									className={style.input}
+									onChange={handleChange}
+									placeholder="جستجو..."
+									rightIcon={<img src={IconSearch} alt="search-icon" />}
+								/>
+							</div>
 						</div>
 						{data.length > 0 ? (
 							<div className={style.table}>
 								<Table
 									rows={data}
-									rowCount={count}
 									loading={loading}
 									columns={columns}
-									paginationMode="server"
-									paginationModel={paginationModel}
-									onPaginationModelChange={setPaginationModel}
+									paginationCount={count}
+									pagination={paginationModel}
+									paginationChange={setPaginationModel}
 								/>
 							</div>
 						) : loading ? (
@@ -318,6 +363,14 @@ const FactorManagement = () => {
 				defaultValues={paymentsData}
 				reload={reload}
 				setReload={setReload}
+			/>
+			<FilterModal
+				open={filterModal}
+				setOpen={setFilterModal}
+				control={control}
+				errors={errors}
+				onSubmit={handleSubmit(getSubmitFilter)}
+				reset={resetFilter}
 			/>
 		</>
 	);

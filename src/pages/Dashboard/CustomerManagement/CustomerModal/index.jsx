@@ -13,10 +13,10 @@ import style from "./style.module.scss";
 
 const schema = () =>
 	object({
-		mobile_number: string().required(translate.errors.required).length(11, "حداکثر ۱۱ رقم"),
+		mobile_number: string().length(11, "حداکثر ۱۱ رقم"),
 		full_name: string().required(translate.errors.required),
 		marketer: string(),
-		national_code: string().required(translate.errors.required).length(10, "حداکثر ۱۰ رقم"),
+		national_code: string().length(10, "حداکثر ۱۰ رقم"),
 		customer_code: number(),
 	});
 
@@ -129,7 +129,6 @@ const CustomerModal = ({
 					className={style.form__input}
 					size="xlarge"
 					label="کد ملی"
-					required
 					error={errors.national_code?.message}
 					{...register("national_code")}
 				/>
@@ -137,7 +136,6 @@ const CustomerModal = ({
 					className={style.form__input}
 					size="xlarge"
 					label="شماره موبایل"
-					required
 					error={errors.mobile_number?.message}
 					{...register("mobile_number")}
 				/>

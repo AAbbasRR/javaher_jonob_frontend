@@ -20,7 +20,7 @@ const schema = () =>
 		full_address: string().required(translate.errors.required),
 	});
 
-const AddressModal = ({ open, setOpen, reload, setReload }) => {
+const AddressModal = ({ open, setOpen, setNewAddress }) => {
 	const {
 		register,
 		setError,
@@ -41,7 +41,7 @@ const AddressModal = ({ open, setOpen, reload, setReload }) => {
 			.then((res) => {
 				closeModal();
 				notify("با موفقیت ثبت شد", "success");
-				setReload(!reload);
+				setNewAddress({ ...res?.data });
 			})
 			.catch((err) => {
 				handleError({ err, setError });

@@ -95,7 +95,7 @@ const FactorModal = ({
 	const [productSearchValueData, setProductSearchValue] = useState("");
 	const [factorProducts, setFactorProducts] = useState([]);
 	const [addAddressModalOpen, setAddAddressModalOpen] = useState(false);
-	const [reloadAddresses, setReloadAddresses] = useState(false);
+	const [newAddress, setNewAddress] = useState({});
 
 	const sumOfFactor = factorProducts?.reduce((sum, item) => {
 		return Math.ceil(
@@ -182,13 +182,13 @@ const FactorModal = ({
 		const customerId = getValues("customer");
 		axios
 			.get("/customer/manage/address/list_create/", {
-				params:
-					customerId !== undefined
-						? { search: customerAddressSearchValue, customer: customerId }
-						: { search: customerAddressSearchValue },
+				params: { search: customerAddressSearchValue, customer: customerId },
 			})
 			.then((res) => {
 				const customerAddressDataVar = [];
+				if (Object.keys(newAddress).length >= 1) {
+					res?.data?.results?.push(newAddress);
+				}
 				res?.data?.results?.map((item) => {
 					customerAddressDataVar.push({
 						label: `${item?.country} - ${item?.state} - ${item?.city} - ${item?.street} - ${item?.full_address}`,
@@ -293,8 +293,10 @@ const FactorModal = ({
 		}
 	}, [customerSearchValue]);
 	useEffect(() => {
-		getCustomerAddressData();
-	}, [watch("customer"), customerAddressSearchValue, reloadAddresses]);
+		if (watch("customer") !== undefined) {
+			getCustomerAddressData();
+		}
+	}, [watch("customer"), customerAddressSearchValue, newAddress]);
 	useEffect(() => {
 		if (productSearchValueData !== "") {
 			getProductData();
@@ -598,8 +600,7 @@ const FactorModal = ({
 			<AddressModal
 				open={addAddressModalOpen}
 				setOpen={setAddAddressModalOpen}
-				reload={reloadAddresses}
-				setReload={setReloadAddresses}
+				setNewAddress={setNewAddress}
 			/>
 		</Modal>
 	);

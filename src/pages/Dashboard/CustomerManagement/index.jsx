@@ -6,6 +6,7 @@ import IconEdit from "src/assets/icons/icon-edit.svg";
 import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
 import IconSearchList from "src/assets/icons/icon-search-document.svg";
+import IconExcel from "src/assets/icons/icon-excel-file.svg";
 import { Empty } from "src/components/Empty";
 import { Spin } from "src/components/Spin";
 import { Input } from "src/components/Input";
@@ -54,6 +55,27 @@ const CustomerManagement = () => {
 			.then((res) => {
 				setData(res.data.results);
 				setCount(res?.data?.total);
+			})
+			.catch((err) => {
+				handleError({ err });
+			})
+			.finally(() => setLoading(false));
+	};
+	const ExportData = () => {
+		setLoading(true);
+
+		axios
+			.get("/customer/manage/export/", {
+				params: { search: searchValue },
+				responseType: 'blob'
+			})
+			.then((res) => {
+				const url = window.URL.createObjectURL(new Blob([res?.data]));
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", "export_customers.xlsx");
+				document.body.appendChild(link);
+				link.click();
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -186,14 +208,21 @@ const CustomerManagement = () => {
 									</IconButton>
 								</Tooltip>
 							</div>
-							<Input
-								size="small"
-								value={value}
-								className={style.input}
-								onChange={handleChange}
-								placeholder="جستجو..."
-								rightIcon={<img src={IconSearch} alt="search-icon" />}
-							/>
+							<div className={style.row}>
+								<Tooltip title="خروجی اکسل">
+									<IconButton className={style.IconButton} onClick={ExportData}>
+										<img src={IconExcel} className={style.searchListIcon} alt="export-icon" />
+									</IconButton>
+								</Tooltip>
+								<Input
+									size="small"
+									value={value}
+									className={style.input}
+									onChange={handleChange}
+									placeholder="جستجو..."
+									rightIcon={<img src={IconSearch} alt="search-icon" />}
+								/>
+							</div>
 						</div>
 						{data.length > 0 ? (
 							<div className={style.table}>

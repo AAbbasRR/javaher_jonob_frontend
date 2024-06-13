@@ -52,6 +52,7 @@ const schema = () =>
 		factor_date: string().required(translate.errors.required),
 		customer: number().required(translate.errors.required),
 		address: number().required(translate.errors.required),
+		driver: number().required(translate.errors.required),
 		store: number().required(translate.errors.required),
 		description: string(),
 	});
@@ -90,6 +91,8 @@ const FactorModal = ({
 	const [customerSearchValue, setCustomerSearchValue] = useState("");
 	const [customerAddressData, setCustomerAddressData] = useState([]);
 	const [customerAddressSearchValue, setCustomerAddressSearchValue] = useState("");
+	const [driverData, setDriverData] = useState([]);
+	const [driverSearchValue, setDriverSearchValue] = useState("");
 	const [productData, setProductData] = useState([]);
 	const [productDataOption, setProductDataOption] = useState([]);
 	const [productSearchValueData, setProductSearchValue] = useState("");
@@ -123,6 +126,13 @@ const FactorModal = ({
 				setProductSearchValue(value);
 			}, 300),
 		[productSearchValueData],
+	);
+	const debouncedDriverSearch = useMemo(
+		() =>
+			_debounce((value) => {
+				setDriverSearchValue(value);
+			}, 300),
+		[driverSearchValue],
 	);
 
 	const getStoreData = () => {
@@ -169,7 +179,9 @@ const FactorModal = ({
 				const customerDataVar = [];
 				res?.data?.results?.map((item) => {
 					customerDataVar.push({
-						label: `${item?.customer_code} - ${item?.full_name} - ${item?.mobile_number}`,
+						label: `${item?.customer_code} - ${item?.full_name}${
+							item?.marketer !== null ? " - بازاریاب: " + item?.marketer : ""
+						}${item?.mobile_number !== null ? " - " + item?.mobile_number : ""}`,
 						value: item?.id,
 						key: item?.id,
 					});
@@ -197,6 +209,24 @@ const FactorModal = ({
 					});
 				});
 				setCustomerAddressData([...customerAddressDataVar]);
+			})
+			.catch((err) => {});
+	};
+	const getDriverData = () => {
+		axios
+			.get("/driver/manage/list_create/", { params: { search: driverSearchValue } })
+			.then((res) => {
+				const driverDataVar = [];
+				res?.data?.results?.map((item) => {
+					driverDataVar.push({
+						label: `${item?.full_name} - ${item?.plate_number}${
+							item?.mobile_number !== null ? " - " + item?.mobile_number : ""
+						}`,
+						value: item?.id,
+						key: item?.id,
+					});
+				});
+				setDriverData([...driverDataVar]);
 			})
 			.catch((err) => {});
 	};
@@ -252,6 +282,10 @@ const FactorModal = ({
 		debouncedCustomerAddressSearch(inputValue);
 		return options;
 	};
+	const filterDriverOptions = (options, { inputValue }) => {
+		debouncedDriverSearch(inputValue);
+		return options;
+	};
 	const filterProductOptions = (options, { inputValue }) => {
 		debouncedProductSearch(inputValue);
 		return options;
@@ -298,6 +332,9 @@ const FactorModal = ({
 		}
 	}, [watch("customer"), customerAddressSearchValue, newAddress]);
 	useEffect(() => {
+		getDriverData();
+	}, [driverSearchValue]);
+	useEffect(() => {
 		if (productSearchValueData !== "") {
 			getProductData();
 		}
@@ -311,6 +348,7 @@ const FactorModal = ({
 			setValue("discount_value", defaultValue?.discount_value);
 			setValue("customer", defaultValue?.customer);
 			setValue("marketer", defaultValue?.marketer);
+			setValue("driver", defaultValue?.driver);
 			setValue("address", defaultValue?.address);
 			setValue("store", defaultValue?.store);
 			setValue("description", defaultValue?.description);
@@ -323,7 +361,7 @@ const FactorModal = ({
 			fullWidth
 			state={open}
 			setState={closeModal}
-			maxWidth="lg"
+			maxWidth="xl"
 			footerEnd={
 				<div className={style.buttons}>
 					<Button size="xlarge" variant="ghost" onClick={closeModal}>
@@ -381,7 +419,7 @@ const FactorModal = ({
 						}}
 						render={({ field: { value, onChange }, fieldState: { error } }) => (
 							<Autocomplete
-								className={style.form__inputHalf}
+								className={style.form__input}
 								disablePortal
 								fullWidth
 								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
@@ -413,7 +451,7 @@ const FactorModal = ({
 						name="address"
 						render={({ field: { value, onChange }, fieldState: { error } }) => (
 							<Autocomplete
-								className={style.form__inputHalf}
+								className={style.form__input}
 								disablePortal
 								fullWidth
 								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
@@ -431,6 +469,41 @@ const FactorModal = ({
 											{...params}
 											{...(params.inputProps.value = value
 												? customerAddressData.find((item) => item.value === value)?.label
+												: value)}
+											sx={sxProps}
+										/>
+									</>
+								)}
+								onChange={(e, newValue) => onChange(newValue.value)}
+							/>
+						)}
+					/>
+					<Controller
+						control={control}
+						name="driver"
+						rules={{
+							required: true,
+						}}
+						render={({ field: { value, onChange }, fieldState: { error } }) => (
+							<Autocomplete
+								className={style.form__input}
+								disablePortal
+								fullWidth
+								PopperComponent={(props) => <Popper {...props} placement="bottom-start" />}
+								filterOptions={filterDriverOptions}
+								id="driver"
+								size="small"
+								options={driverData}
+								renderInput={(params) => (
+									<>
+										<TextField
+											error={!!error}
+											helperText={error ? error.message : null}
+											label="راننده *"
+											size="small"
+											{...params}
+											{...(params.inputProps.value = value
+												? driverData.find((item) => item.value === value)?.label
 												: value)}
 											sx={sxProps}
 										/>

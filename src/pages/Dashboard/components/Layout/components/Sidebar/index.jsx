@@ -2,6 +2,8 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import IconStaffManagement from "src/assets/icons/icon-admin-management.svg";
 import IconCustomerManagement from "src/assets/icons/icon-customer-management.svg";
+import IconFactorManagement from "src/assets/icons/icon-customer-orders.svg";
+import IconDriverManagement from "src/assets/icons/icon-delivery-gray.svg";
 import IconRemove from "src/assets/icons/icon-exit-24.svg";
 import IconExit from "src/assets/icons/icon-exit.svg";
 import IconHome from "src/assets/icons/icon-home.svg";
@@ -35,7 +37,7 @@ const menu = [
 	},
 	{
 		title: "فاکتور",
-		icon: IconProductManagement,
+		icon: IconFactorManagement,
 		path: "factor-management",
 		permissions: ["superuser", "staff", "secretary", "worker"],
 	},
@@ -49,6 +51,12 @@ const menu = [
 		title: "مدیریت مشتریان",
 		icon: IconCustomerManagement,
 		path: "customer-management",
+		permissions: ["superuser", "staff", "secretary"],
+	},
+	{
+		title: "مدیریت راننده ها",
+		icon: IconDriverManagement,
+		path: "driver-management",
 		permissions: ["superuser", "staff", "secretary"],
 	},
 	{

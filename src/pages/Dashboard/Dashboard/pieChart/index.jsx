@@ -4,7 +4,7 @@ const PieChart = ({ data, full = false }) => {
 	return (
 		<ResponsivePie
 			data={data}
-			margin={{ top: 30, bottom: 30 }}
+			margin={{ top: 30, bottom: 40 }}
 			innerRadius={full ? 0 : 0.65}
 			colors={{ scheme: "category10" }}
 			padAngle={full ? 0 : 2}

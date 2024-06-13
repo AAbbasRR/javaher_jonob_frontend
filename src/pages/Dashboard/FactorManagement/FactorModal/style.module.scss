@@ -38,7 +38,7 @@
 			width: 65% !important;
 		}
 
-		&Half{
+		&Half {
 			width: 48% !important;
 		}
 
@@ -72,10 +72,14 @@
 	gap: 1.25rem;
 }
 
-@media screen and (max-width: 627px) {
+@media screen and (max-width: 990px) {
 	.form {
 		&__input {
 			width: 99% !important;
+
+			&Big {
+				width: 99% !important;
+			}
 		}
 	}
 }

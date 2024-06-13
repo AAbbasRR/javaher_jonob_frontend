@@ -8,19 +8,17 @@ import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
-import { object, string, number } from "yup";
+import { object, string } from "yup";
 import style from "./style.module.scss";
 
 const schema = () =>
 	object({
 		mobile_number: string().nullable(),
 		full_name: string().required(translate.errors.required),
-		marketer: string().nullable(),
-		national_code: string().nullable(),
-		customer_code: number(),
+		plate_number: string().required(translate.errors.required),
 	});
 
-const CustomerModal = ({
+const DriverModal = ({
 	open,
 	setOpen,
 	reload,
@@ -47,7 +45,7 @@ const CustomerModal = ({
 		setLoading(true);
 		if (editItemID === null) {
 			axios
-				.post("/customer/manage/list_create/", data)
+				.post("/driver/manage/list_create/", data)
 				.then((res) => {
 					closeModal();
 					notify("با موفقیت ثبت شد", "success");
@@ -59,7 +57,7 @@ const CustomerModal = ({
 				.finally(() => setLoading(false));
 		} else {
 			axios
-				.put(`/customer/manage/update_delete/?pk=${editItemID}`, data)
+				.put(`/driver/manage/update_delete/?pk=${editItemID}`, data)
 				.then((res) => {
 					closeModal();
 					notify("با موفقیت ویرایش شد", "success");
@@ -70,14 +68,6 @@ const CustomerModal = ({
 				})
 				.finally(() => setLoading(false));
 		}
-	};
-	const getLastCustomerCodeData = () => {
-		axios
-			.get("/customer/manage/last_customer_code/")
-			.then((res) => {
-				setValue("customer_code", res?.data);
-			})
-			.catch((err) => {});
 	};
 	const closeModal = () => {
 		setOpen(false);
@@ -90,14 +80,9 @@ const CustomerModal = ({
 			setEditItemID(defaultValue?.id);
 			setValue("mobile_number", defaultValue?.mobile_number);
 			setValue("full_name", defaultValue?.full_name);
-			setValue("customer_code", defaultValue?.customer_code);
-			setValue("national_code", defaultValue?.national_code);
-			setValue("marketer", defaultValue?.marketer);
+			setValue("plate_number", defaultValue?.plate_number);
 		}
 	}, [defaultValue]);
-	useEffect(() => {
-		getLastCustomerCodeData();
-	}, []);
 
 	return (
 		<Modal
@@ -128,34 +113,21 @@ const CustomerModal = ({
 				<Input
 					className={style.form__input}
 					size="xlarge"
-					label="کد ملی"
-					error={errors.national_code?.message}
-					{...register("national_code")}
-				/>
-				<Input
-					className={style.form__input}
-					size="xlarge"
 					label="شماره موبایل"
 					error={errors.mobile_number?.message}
 					{...register("mobile_number")}
 				/>
 				<Input
-					className={style.form__input}
-					size="xlarge"
-					label="کد مشتری"
-					error={errors.customer_code?.message}
-					{...register("customer_code")}
-				/>
-				<Input
 					className={style.form__inputFull}
+					required
 					size="xlarge"
-					label="بازاریاب/معرف"
-					error={errors.marketer?.message}
-					{...register("marketer")}
+					label="پلاک"
+					error={errors.plate_number?.message}
+					{...register("plate_number")}
 				/>
 			</form>
 		</Modal>
 	);
 };
 
-export default CustomerModal;
+export default DriverModal;

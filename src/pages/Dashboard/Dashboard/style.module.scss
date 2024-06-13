@@ -113,27 +113,6 @@
 		&__filterbox {
 			display: flex;
 			gap: 0.5rem;
-
-			&__button {
-				padding: 0.2rem 0.6rem;
-				border: 1px solid #212121;
-				border-radius: 0.8rem;
-				transition: 0.3s;
-
-				&:hover {
-					cursor: pointer;
-					background-color: #212121;
-					opacity: 0.6;
-					color: #fefefe;
-					transition: 0.3s;
-				}
-
-				&__active {
-					background-color: #5e5e5e;
-					opacity: 0.6;
-					color: #fefefe;
-				}
-			}
 		}
 	}
 }

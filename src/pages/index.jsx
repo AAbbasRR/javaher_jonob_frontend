@@ -2,14 +2,14 @@ import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "src/components/PrivateRoute";
 import useAuthStore from "src/store";
 import NotFound from "./404";
+import ChangePassword from "./Dashboard/ChangePassword";
 import CustomerManagement from "./Dashboard/CustomerManagement";
 import Dashboard from "./Dashboard/Dashboard";
-import { useState } from "react";
 import FactorManagement from "./Dashboard/FactorManagement";
 import ProductManagement from "./Dashboard/ProductManagement";
 import StaffManagement from "./Dashboard/StaffManagement";
 import StoreManagement from "./Dashboard/StoreManagement";
-import ChangePassword from "./Dashboard/ChangePassword";
+import DriverManagement from "./Dashboard/DriverManagement";
 import Layout from "./Dashboard/components/Layout";
 import SignIn from "./SignIn";
 
@@ -32,6 +32,11 @@ const dashboardPages = [
 	{
 		element: <CustomerManagement />,
 		path: "customer-management",
+		permissions: ["superuser", "staff", "secretary"],
+	},
+	{
+		element: <DriverManagement />,
+		path: "driver-management",
 		permissions: ["superuser", "staff", "secretary"],
 	},
 	{

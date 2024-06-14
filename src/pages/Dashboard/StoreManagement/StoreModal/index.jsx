@@ -61,9 +61,10 @@ const StoreModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 		}
 	};
 	const closeModal = () => {
-		setOpen(false);
 		reset();
 		setDefaultValue(null);
+		setEditItemID(null);
+		setOpen(false);
 	};
 
 	useEffect(() => {

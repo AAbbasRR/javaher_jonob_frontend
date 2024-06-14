@@ -10,6 +10,7 @@ import IconHome from "src/assets/icons/icon-home.svg";
 import IconLock from "src/assets/icons/icon-lock.svg";
 import IconProductManagement from "src/assets/icons/icon-product-management.svg";
 import IconStoreManagement from "src/assets/icons/icon-store.svg";
+import IconTime from "src/assets/icons/icon-time.svg";
 import logo from "src/assets/images/logo.png";
 import { Button } from "src/components/Button";
 import { Modal } from "src/components/Modal";
@@ -22,6 +23,12 @@ const menu = [
 		icon: IconHome,
 		path: "dashboard",
 		permissions: ["staff", "superuser"],
+	},
+	{
+		title: "لیست رویداد ها",
+		icon: IconTime,
+		path: "history-management",
+		permissions: ["superuser"],
 	},
 	{
 		title: "مدیریت انبار",

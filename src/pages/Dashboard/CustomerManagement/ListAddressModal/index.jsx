@@ -179,12 +179,11 @@ const ListAddressModal = ({ open, setOpen, customerID }) => {
 								<div className={style.table}>
 									<Table
 										rows={data}
-										rowCount={count}
 										loading={loading}
 										columns={columns}
-										paginationMode="server"
-										paginationModel={paginationModel}
-										onPaginationModelChange={setPaginationModel}
+										paginationCount={count}
+										pagination={paginationModel}
+										paginationChange={setPaginationModel}
 									/>
 								</div>
 							) : loading ? (

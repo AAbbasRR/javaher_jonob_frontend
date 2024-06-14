@@ -5,11 +5,12 @@ import NotFound from "./404";
 import ChangePassword from "./Dashboard/ChangePassword";
 import CustomerManagement from "./Dashboard/CustomerManagement";
 import Dashboard from "./Dashboard/Dashboard";
+import DriverManagement from "./Dashboard/DriverManagement";
 import FactorManagement from "./Dashboard/FactorManagement";
+import HistoryManagement from "./Dashboard/HistoryManagement";
 import ProductManagement from "./Dashboard/ProductManagement";
 import StaffManagement from "./Dashboard/StaffManagement";
 import StoreManagement from "./Dashboard/StoreManagement";
-import DriverManagement from "./Dashboard/DriverManagement";
 import Layout from "./Dashboard/components/Layout";
 import SignIn from "./SignIn";
 
@@ -48,6 +49,11 @@ const dashboardPages = [
 		element: <ProductManagement />,
 		path: "product-management",
 		permissions: ["staff", "superuser"],
+	},
+	{
+		element: <HistoryManagement />,
+		path: "history-management",
+		permissions: ["superuser"],
 	},
 	{
 		element: <ChangePassword />,

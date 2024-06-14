@@ -6,6 +6,7 @@ import IconDriverManagement from "src/assets/icons/icon-delivery-gray.svg";
 import IconHome from "src/assets/icons/icon-home.svg";
 import IconProductManagement from "src/assets/icons/icon-product-management.svg";
 import IconStoreManagement from "src/assets/icons/icon-store.svg";
+import IconTime from "src/assets/icons/icon-time.svg";
 import useAuthStore from "src/store";
 import style from "./style.module.scss";
 
@@ -15,6 +16,12 @@ const menu = [
 		icon: IconHome,
 		path: "dashboard",
 		permissions: ["staff", "superuser"],
+	},
+	{
+		title: "رویداد ها",
+		icon: IconTime,
+		path: "history-management",
+		permissions: ["superuser"],
 	},
 	{
 		title: "انبار",
@@ -47,7 +54,7 @@ const menu = [
 		permissions: ["superuser", "staff", "secretary"],
 	},
 	{
-		title: "مدیریت راننده ها",
+		title: "راننده ها",
 		icon: IconDriverManagement,
 		path: "driver-management",
 		permissions: ["superuser", "staff", "secretary"],

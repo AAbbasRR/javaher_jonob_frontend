@@ -14,7 +14,7 @@ import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
 import notify from "src/utils/toast";
 import { translate } from "src/utils/translate";
-import { bool, array, object, string } from "yup";
+import { array, bool, object, string } from "yup";
 import style from "./style.module.scss";
 
 const schema = (isUpdate) =>
@@ -78,9 +78,10 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 		}
 	};
 	const closeModal = () => {
-		setOpen(false);
-		reset();
 		setDefaultValue(null);
+		setEditItemID(null);
+		reset();
+		setOpen(false);
 	};
 	const getStoreData = () => {
 		axios
@@ -186,18 +187,20 @@ const StaffModal = ({ open, setOpen, reload, setReload, setDefaultValue, default
 						{ value: "worker", name: "کارگر" },
 					]}
 				/>
-				{["secretary", "worker"].includes(user_type) && <Select
-					className={style.form__input}
-					size="xlarge"
-					label="شعبه های کاری"
-					placeholder="انتخاب شعبه"
-					required
-					multiple
-					name="stores"
-					control={control}
-					error={errors.stores?.message}
-					options={storeData}
-				/>}
+				{["secretary", "worker"].includes(user_type) && (
+					<Select
+						className={style.form__input}
+						size="xlarge"
+						label="شعبه های کاری"
+						placeholder="انتخاب شعبه"
+						required
+						multiple
+						name="stores"
+						control={control}
+						error={errors.stores?.message}
+						options={storeData}
+					/>
+				)}
 				<div className={style.row}>
 					<FormControlLabel
 						className={style.formLabel}

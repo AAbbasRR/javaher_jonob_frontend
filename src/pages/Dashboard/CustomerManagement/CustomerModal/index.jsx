@@ -80,9 +80,10 @@ const CustomerModal = ({
 			.catch((err) => {});
 	};
 	const closeModal = () => {
-		setOpen(false);
 		reset();
 		setDefaultValue(null);
+		setEditItemID(null);
+		setOpen(false);
 	};
 
 	useEffect(() => {

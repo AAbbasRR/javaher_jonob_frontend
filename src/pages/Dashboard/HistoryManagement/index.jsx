@@ -13,6 +13,7 @@ import { Spin } from "src/components/Spin";
 import { Table } from "src/components/Table";
 import { handleError } from "src/utils/api-error-handling";
 import axios from "src/utils/axios";
+import { translateKeys } from "src/utils/translate";
 import FilterModal from "./FilterModal";
 import style from "./style.module.scss";
 
@@ -111,6 +112,26 @@ const HistoryManagement = () => {
 		getData();
 	};
 	const openDataJsonModal = (row) => {
+		let datetimekeys = ["create_at", "updated_at", "deleted_at", "last_login", "date_joined"];
+		let datekeys = ["factor_date", "payment_date"];
+		datetimekeys.forEach((key) => {
+			if (row?.data_before?.[key]) {
+				row.data_before[key] = new Date(row.data_before[key]).toLocaleString("fa-IR");
+			}
+			if (row?.data_after?.[key]) {
+				row.data_after[key] = new Date(row.data_after[key]).toLocaleString("fa-IR");
+			}
+		});
+		datekeys.forEach((key) => {
+			if (row?.data_before?.[key]) {
+				row.data_before[key] = new Date(row.data_before[key])
+					.toLocaleString("fa-IR")
+					.split(", ")[0];
+			}
+			if (row?.data_after?.[key]) {
+				row.data_after[key] = new Date(row.data_after[key]).toLocaleString("fa-IR").split(", ")[0];
+			}
+		});
 		setDataJsonSelected(row);
 		setDataJsonModal(true);
 	};
@@ -256,13 +277,17 @@ const HistoryManagement = () => {
 				{dataJsonSelected?.data_before && (
 					<div className={style.jsonBox}>
 						<span className={style.title}>داده قبل از تغییر</span>
-						<JSONView src={JSON.parse(JSON.stringify(dataJsonSelected?.data_before))} />
+						<JSONView
+							src={JSON.parse(JSON.stringify(translateKeys(dataJsonSelected?.data_before)))}
+						/>
 					</div>
 				)}
 				{dataJsonSelected?.data_after && (
 					<div className={style.jsonBox}>
 						<span className={style.title}>داده بعد از تغییر</span>
-						<JSONView src={JSON.parse(JSON.stringify(dataJsonSelected?.data_after))} />
+						<JSONView
+							src={JSON.parse(JSON.stringify(translateKeys(dataJsonSelected?.data_after)))}
+						/>
 					</div>
 				)}
 			</Modal>

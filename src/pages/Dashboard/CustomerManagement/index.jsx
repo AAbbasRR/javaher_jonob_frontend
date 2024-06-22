@@ -209,11 +209,6 @@ const CustomerManagement = () => {
 								</Tooltip>
 							</div>
 							<div className={style.row}>
-								<Tooltip title="خروجی اکسل">
-									<IconButton className={style.IconButton} onClick={ExportData}>
-										<img src={IconExcel} className={style.searchListIcon} alt="export-icon" />
-									</IconButton>
-								</Tooltip>
 								<Input
 									size="small"
 									value={value}
@@ -222,6 +217,11 @@ const CustomerManagement = () => {
 									placeholder="جستجو..."
 									rightIcon={<img src={IconSearch} alt="search-icon" />}
 								/>
+								<Tooltip title="خروجی اکسل">
+									<IconButton className={style.IconButton} onClick={ExportData}>
+										<img src={IconExcel} className={style.searchListIcon} alt="export-icon" />
+									</IconButton>
+								</Tooltip>
 							</div>
 						</div>
 						{data.length > 0 ? (

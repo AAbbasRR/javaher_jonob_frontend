@@ -11,6 +11,7 @@ import IconEdit from "src/assets/icons/icon-edit.svg";
 import iconInfo from "src/assets/icons/icon-info.svg";
 import IconSearch from "src/assets/icons/icon-input-search.svg";
 import IconAdd from "src/assets/icons/icon-plus-circle-success.svg";
+import IconExcel from "src/assets/icons/icon-excel-file.svg";
 import { Empty } from "src/components/Empty";
 import { Input } from "src/components/Input";
 import { Spin } from "src/components/Spin";
@@ -84,6 +85,32 @@ const FactorManagement = () => {
 			.then((res) => {
 				setData(res.data.results);
 				setCount(res?.data?.total);
+			})
+			.catch((err) => {
+				handleError({ err });
+			})
+			.finally(() => setLoading(false));
+	};
+	const ExportData = () => {
+		setLoading(true);
+
+		axios
+			.get("/factor/manage/export/", {
+				params: {
+					search: searchValue,
+					factor_date_after: filterData.factor_date_after,
+					factor_date_before: filterData.factor_date_before,
+					payment_status: filterData.payment_status,
+				},
+				responseType: "blob",
+			})
+			.then((res) => {
+				const url = window.URL.createObjectURL(new Blob([res?.data]));
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", "export_factors.xlsx");
+				document.body.appendChild(link);
+				link.click();
 			})
 			.catch((err) => {
 				handleError({ err });
@@ -344,6 +371,11 @@ const FactorManagement = () => {
 									placeholder="جستجو..."
 									rightIcon={<img src={IconSearch} alt="search-icon" />}
 								/>
+								<Tooltip title="خروجی اکسل">
+									<IconButton className={style.IconButton} onClick={ExportData}>
+										<img src={IconExcel} className={style.searchListIcon} alt="export-icon" />
+									</IconButton>
+								</Tooltip>
 							</div>
 						</div>
 						{data.length > 0 ? (

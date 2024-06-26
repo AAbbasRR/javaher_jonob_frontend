@@ -170,6 +170,12 @@ const FactorManagement = () => {
 		});
 		setFilterModal(false);
 	};
+	const exportFactorFile = (link) => {
+		const a_tag = document.createElement("a");
+		a_tag.href = link;
+		document.body.appendChild(a_tag);
+		a_tag.click();
+	};
 
 	useEffect(() => {
 		if (userInfo?.is_superuser === false) {
@@ -295,7 +301,7 @@ const FactorManagement = () => {
 			renderCell: ({ row }) => (
 				<div className={style.row}>
 					<Tooltip title="چاپ">
-						<IconButton className={style.IconButton} onClick={() => deleteAdmin(row?.id)}>
+						<IconButton className={style.IconButton} onClick={() => exportFactorFile(row?.factor_file)}>
 							<LocalPrintshopIcon alt="print-icon" />
 						</IconButton>
 					</Tooltip>

@@ -16,6 +16,7 @@ const schema = () =>
 		mobile_number: string().nullable(),
 		full_name: string().required(translate.errors.required),
 		plate_number: string().required(translate.errors.required),
+		state: string(),
 	});
 
 const DriverModal = ({
@@ -82,6 +83,7 @@ const DriverModal = ({
 			setValue("mobile_number", defaultValue?.mobile_number);
 			setValue("full_name", defaultValue?.full_name);
 			setValue("plate_number", defaultValue?.plate_number);
+			setValue("state", defaultValue?.state);
 		}
 	}, [defaultValue]);
 
@@ -119,7 +121,14 @@ const DriverModal = ({
 					{...register("mobile_number")}
 				/>
 				<Input
-					className={style.form__inputFull}
+					className={style.form__input}
+					size="xlarge"
+					label="استان"
+					error={errors.state?.message}
+					{...register("state")}
+				/>
+				<Input
+					className={style.form__input}
 					required
 					size="xlarge"
 					label="پلاک"

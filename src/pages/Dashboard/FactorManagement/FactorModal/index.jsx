@@ -221,6 +221,8 @@ const FactorModal = ({
 					driverDataVar.push({
 						label: `${item?.full_name} - ${item?.plate_number}${
 							item?.mobile_number !== null ? " - " + item?.mobile_number : ""
+						}${
+							item?.state !== null ? " - " + item?.state : ""
 						}`,
 						value: item?.id,
 						key: item?.id,

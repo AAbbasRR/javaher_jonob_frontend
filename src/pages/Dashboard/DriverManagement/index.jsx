@@ -105,6 +105,13 @@ const DriverManagement = () => {
 			sortable: false,
 		},
 		{
+			headerName: "استان",
+			field: "state",
+			flex: 1,
+			minWidth: 150,
+			sortable: false,
+		},
+		{
 			headerName: "تاریخ ایجاد",
 			field: "formatted_date_joined",
 			flex: 1,
